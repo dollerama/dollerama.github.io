@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":[["publish_modules",""]],"struct":[["Vec2",""]]};

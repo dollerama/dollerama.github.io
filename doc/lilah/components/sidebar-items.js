@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":[["publish_modules",""]],"struct":[["Animator",""],["Rigidbody",""],["Sprite",""],["Transform",""]],"trait":[["Buildable",""],["Component",""],["Drawable",""],["Initable",""],["Tickable",""]]};
