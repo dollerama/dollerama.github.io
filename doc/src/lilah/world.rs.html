@@ -260,21 +260,42 @@
 <a href="#260" id="260">260</a>
 <a href="#261" id="261">261</a>
 <a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
 </pre><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
-
-<span class="kw">use crate</span>::{application::{App, Scripting}, components::{Rigidbody, Sprite, Transform}};
+<span class="kw">use </span>debug_print::{debug_print, debug_println, debug_eprintln};
+<span class="kw">use crate</span>::{application::{App, Scripting}, components::{Rigidbody, Sprite, Transform}, gameobject::GameObjectId};
 <span class="kw">use </span><span class="kw">crate</span>::gameobject::GameObject;
 <span class="kw">use </span>ruwren::{VM, create_module, Class, get_slot_checked, ModuleLibrary, FunctionSignature, VMWrapper};
 <span class="kw">use </span>sdl2::{render::Texture, image::LoadTexture};
 
 <span class="kw">pub struct </span>WorldState {
-    <span class="kw">pub </span>gameobjects: HashMap&lt;u64, GameObject&gt;,
+    <span class="kw">pub </span>gameobjects: HashMap&lt;String, GameObject&gt;,
     <span class="kw">pub </span>textures : HashMap&lt;String, Texture&gt;
 }
 
 <span class="kw">impl </span>WorldState {
+    <span class="kw">pub fn </span>wrap(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>GameObject&gt; {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(g) = <span class="self">self</span>.gameobjects.iter().find(|(<span class="kw">_</span>, k)| (k.id.name == key || k.id.uuid == key)) {
+            <span class="prelude-val">Some</span>(g.<span class="number">1</span>)
+        }
+        <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>}
+    }
+
+    <span class="kw">pub fn </span>wrap_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>GameObject&gt; {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(g) = <span class="self">self</span>.gameobjects.iter_mut().find(|(<span class="kw">_</span>, k)| (k.id.name == key || k.id.uuid == key)) {
+            <span class="prelude-val">Some</span>(g.<span class="number">1</span>)
+        }
+        <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>}
+    }
+
     <span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str) -&gt; <span class="kw-2">&amp;</span>GameObject {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(g) = <span class="self">self</span>.gameobjects.iter().find(|(<span class="kw">_</span>, k)| k.id == key) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(g) = <span class="self">self</span>.gameobjects.iter().find(|(<span class="kw">_</span>, k)| (k.id.name == key || k.id.uuid == key)) {
             g.<span class="number">1
         </span>}
         <span class="kw">else </span>{
@@ -283,7 +304,7 @@
     }
 
     <span class="kw">pub fn </span>get_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str) -&gt; <span class="kw-2">&amp;mut </span>GameObject {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(g) = <span class="self">self</span>.gameobjects.iter_mut().find(|(<span class="kw">_</span>, k)| k.id == key) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(g) = <span class="self">self</span>.gameobjects.iter_mut().find(|(<span class="kw">_</span>, k)| (k.id.name == key || k.id.uuid == key)) {
             g.<span class="number">1
         </span>}
         <span class="kw">else </span>{
@@ -293,22 +314,24 @@
 
     <span class="kw">pub fn </span>insert_wren(<span class="kw-2">&amp;mut </span><span class="self">self</span>, g : GameObject) {
         <span class="kw">let </span><span class="kw-2">mut </span>g2 = g.clone();
-        <span class="kw">let </span>h = g2.get_hash();
-        <span class="self">self</span>.gameobjects.insert(h, g2);
+        <span class="self">self</span>.gameobjects.insert(g2.id.uuid.clone(), g2);
     }
 
     <span class="kw">pub fn </span>insert(<span class="kw-2">&amp;mut </span><span class="self">self</span>, g : GameObject) {
         <span class="kw">let </span><span class="kw-2">mut </span>g2 = g.clone();
-        g2.num_id = <span class="self">self</span>.gameobjects.keys().len();
-        <span class="kw">let </span>h = g2.get_hash();
-        <span class="self">self</span>.gameobjects.insert(h, g2);
+        g2.wren_id = <span class="self">self</span>.gameobjects.keys().len();
+        <span class="self">self</span>.gameobjects.insert(g2.id.uuid.clone(), g2);
     }
 
     <span class="kw">pub fn </span>load_texture(<span class="kw-2">&amp;mut </span><span class="self">self</span>, file : <span class="kw-2">&amp;</span>str, app : <span class="kw-2">&amp;</span>App) {
-        <span class="kw">if let </span><span class="prelude-val">Ok</span>(v) = app.tex_creator.load_texture(file) {
-            <span class="self">self</span>.textures.insert(file.to_string(), v);
-            <span class="macro">println!</span>(<span class="string">&quot;texture loaded&quot;</span>);
-        }
+        <span class="kw">match </span>app.tex_creator.load_texture(file) {
+            <span class="prelude-val">Ok</span>(v) =&gt; {
+                <span class="self">self</span>.textures.insert(file.to_string(), v);
+            }
+            <span class="prelude-val">Err</span>(e) =&gt; {
+                <span class="macro">debug_eprintln!</span>(<span class="string">&quot;Texture Error: {}&quot;</span>, e);
+            }
+        };
     }
 }
 
@@ -350,14 +373,13 @@
 
     <span class="kw">pub fn </span>run(<span class="kw-2">mut </span><span class="self">self</span>, app : <span class="kw-2">&amp;mut </span>App, scripting : <span class="kw-2">&amp;mut </span>Scripting) -&gt; World {
         <span class="self">self</span>.setup_callback.as_mut().unwrap()(app, <span class="kw-2">&amp;mut </span><span class="self">self</span>.state, scripting);
+        <span class="kw">for </span>(<span class="kw">_</span>, i) <span class="kw">in </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.state.gameobjects {
+            i.load(<span class="kw-2">&amp;</span><span class="self">self</span>.state.textures);   
+        }
+        <span class="self">self</span>.start_callback.as_ref().unwrap()(app, <span class="kw-2">&amp;mut </span><span class="self">self</span>.state, scripting);
 
-        <span class="comment">// for (_, g) in &amp;mut self.state.gameobjects {
-        //     g.load(&amp;self.state.textures);
-        // }
-
-        //scripting.send_state(app, &amp;mut self.state);
-
-        </span><span class="self">self</span>.start_callback.as_ref().unwrap()(app, <span class="kw-2">&amp;mut </span><span class="self">self</span>.state, scripting);
+        scripting.receive_state(app, <span class="kw-2">&amp;mut </span><span class="self">self</span>.state);
+        scripting.send_state(app, <span class="kw-2">&amp;mut </span><span class="self">self</span>.state);
 
         <span class="lifetime">&#39;running</span>: <span class="kw">loop </span>{
             <span class="kw">if </span>app.pre_frame() {
@@ -365,14 +387,11 @@
             }
 
             scripting.tick(app, <span class="kw-2">&amp;mut </span><span class="self">self</span>.state);
+            <span class="self">self</span>.update_callback.as_mut().unwrap()(app, <span class="kw-2">&amp;mut </span><span class="self">self</span>.state, scripting);
+            <span class="self">self</span>.update(app);
             scripting.send_state(app, <span class="kw-2">&amp;mut </span><span class="self">self</span>.state);
 
-            <span class="self">self</span>.update_callback.as_mut().unwrap()(app, <span class="kw-2">&amp;mut </span><span class="self">self</span>.state, scripting);
-            
-            <span class="self">self</span>.update(app);
-
             <span class="self">self</span>.draw(app);
-
             app.present_frame();
         }
 
@@ -381,10 +400,8 @@
 
     <span class="kw">fn </span>update_go(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>app: <span class="kw-2">&amp;mut </span>App) {
         <span class="kw">for </span>(<span class="kw">_</span>, i) <span class="kw">in </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.state.gameobjects {
+            i.load(<span class="kw-2">&amp;</span><span class="self">self</span>.state.textures);   
             i.update(<span class="kw-2">&amp;mut </span>app);
-            <span class="kw">if </span>i.frame == <span class="number">1 </span>{
-                i.load(<span class="kw-2">&amp;</span><span class="self">self</span>.state.textures);
-            }
         }
     }
 
@@ -396,87 +413,73 @@
         }
     }
 
-    <span class="kw">pub fn </span>wrap_gameobject(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>GameObject&gt; {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(g) = <span class="self">self</span>.state.gameobjects.iter().find(|(<span class="kw">_</span>, k)| k.id == key) {
-            <span class="prelude-val">Some</span>(g.<span class="number">1</span>)
-        }
-        <span class="kw">else </span>{
-            <span class="prelude-val">None
-        </span>}
+    <span class="kw">pub fn </span>wrap(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>GameObject&gt; {
+        <span class="self">self</span>.state.wrap(key)
     }
 
-    <span class="kw">pub fn </span>wrap_gameobject_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>GameObject&gt; {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(g) = <span class="self">self</span>.state.gameobjects.iter_mut().find(|(<span class="kw">_</span>, k)| k.id == key) {
-            <span class="prelude-val">Some</span>(g.<span class="number">1</span>)
-        }
-        <span class="kw">else </span>{
-            <span class="prelude-val">None
-        </span>}
+    <span class="kw">pub fn </span>wrap_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>GameObject&gt; {
+        <span class="self">self</span>.state.wrap_mut(key)
     }
 
     <span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str) -&gt; <span class="kw-2">&amp;</span>GameObject {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(g) = <span class="self">self</span>.state.gameobjects.iter().find(|(<span class="kw">_</span>, k)| k.id == key) {
-            g.<span class="number">1
-        </span>}
-        <span class="kw">else </span>{
-            <span class="macro">panic!</span>(<span class="string">&quot;tried to get gameobject got None&quot;</span>)
-        }
+        <span class="self">self</span>.state.get(key)
     }
 
     <span class="kw">pub fn </span>get_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str) -&gt; <span class="kw-2">&amp;mut </span>GameObject {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(g) = <span class="self">self</span>.state.gameobjects.iter_mut().find(|(<span class="kw">_</span>, k)| k.id == key) {
-            g.<span class="number">1
-        </span>}
-        <span class="kw">else </span>{
-            <span class="macro">panic!</span>(<span class="string">&quot;tried to get gameobject got None&quot;</span>)
-        }
+        <span class="self">self</span>.state.get_mut(key)
     }
 
     <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>app: <span class="kw-2">&amp;mut </span>App) {
         <span class="kw">let </span><span class="kw-2">mut </span>check_1 = <span class="bool-val">false</span>;
 
         <span class="self">self</span>.update_vel_x();
-        <span class="kw">let </span><span class="kw-2">mut </span>collisions = Vec::&lt;(String, String, bool)&gt;::new();
+        <span class="kw">let </span><span class="kw-2">mut </span>collisions = Vec::&lt;(GameObjectId, GameObjectId, bool)&gt;::new();
         <span class="self">self</span>.check_collision(<span class="kw-2">&amp;mut </span>collisions);
 
         <span class="kw">for </span>coll <span class="kw">in </span><span class="kw-2">&amp;</span>collisions {
             <span class="kw">if </span>coll.<span class="number">2 </span>{
-                <span class="kw">if </span><span class="self">self</span>.get(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>).has::&lt;Rigidbody&gt;() {
-                    <span class="kw">let </span>body = <span class="self">self</span>.get_mut(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>).get_mut::&lt;Rigidbody&gt;();
-                    body.colliding = <span class="prelude-val">Some</span>(coll.<span class="number">1</span>.clone());
-                    check_1 = <span class="bool-val">true</span>;
-                    
-                    <span class="kw">if </span>body.solid {
-                        body.update_correct_x();
-                    }
-                }  
+                <span class="kw">if </span><span class="self">self</span>.get(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>.uuid).init &amp;&amp; <span class="self">self</span>.get(<span class="kw-2">&amp;</span>coll.<span class="number">1</span>.uuid).init {
+                    <span class="kw">let </span>g2_is_solid = <span class="self">self</span>.get(<span class="kw-2">&amp;</span>coll.<span class="number">1</span>.uuid).get::&lt;Rigidbody&gt;().solid;
+                    <span class="kw">if </span><span class="self">self</span>.get(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>.uuid).has::&lt;Rigidbody&gt;() {
+                        <span class="kw">let </span>body = <span class="self">self</span>.get_mut(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>.uuid).get_mut::&lt;Rigidbody&gt;();
+                        body.colliding = <span class="prelude-val">Some</span>(coll.<span class="number">1</span>.clone());
+                        check_1 = <span class="bool-val">true</span>;
+                        
+                        <span class="kw">if </span>g2_is_solid {
+                            body.update_correct_x();
+                        }
+                    }  
+                }
             }
             <span class="kw">else </span>{
-               <span class="kw">if </span><span class="self">self</span>.get(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>).has::&lt;Rigidbody&gt;() {
-                    <span class="kw">let </span>body = <span class="self">self</span>.get_mut(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>).get_mut::&lt;Rigidbody&gt;();
+               <span class="kw">if </span><span class="self">self</span>.get(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>.uuid).has::&lt;Rigidbody&gt;() {
+                    <span class="kw">let </span>body = <span class="self">self</span>.get_mut(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>.uuid).get_mut::&lt;Rigidbody&gt;();
                     body.colliding = <span class="prelude-val">None</span>;
                } 
             }
         }
 
         <span class="self">self</span>.update_vel_y();
-        collisions = Vec::&lt;(String, String, bool)&gt;::new();
+        collisions = Vec::&lt;(GameObjectId, GameObjectId, bool)&gt;::new();
         <span class="self">self</span>.check_collision(<span class="kw-2">&amp;mut </span>collisions);
 
         <span class="kw">for </span>coll <span class="kw">in </span><span class="kw-2">&amp;</span>collisions {
             <span class="kw">if </span>coll.<span class="number">2 </span>{
-                <span class="kw">if </span><span class="self">self</span>.get(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>).has::&lt;Rigidbody&gt;() {
-                    <span class="kw">let </span>body = <span class="self">self</span>.state.get_mut(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>).get_mut::&lt;Rigidbody&gt;();
-                    body.colliding = <span class="prelude-val">Some</span>(coll.<span class="number">1</span>.clone());
-                    <span class="kw">if </span>body.solid {
-                        body.update_correct_y();
-                    }
-                } 
+                <span class="kw">if </span><span class="self">self</span>.get(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>.uuid).init &amp;&amp; <span class="self">self</span>.get(<span class="kw-2">&amp;</span>coll.<span class="number">1</span>.uuid).init {
+                    <span class="kw">let </span>g2_is_solid = <span class="self">self</span>.get(<span class="kw-2">&amp;</span>coll.<span class="number">1</span>.uuid).get::&lt;Rigidbody&gt;().solid;
+                    <span class="kw">if </span><span class="self">self</span>.get(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>.uuid).has::&lt;Rigidbody&gt;() {
+                        <span class="kw">let </span>body = <span class="self">self</span>.state.get_mut(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>.uuid).get_mut::&lt;Rigidbody&gt;();
+                        body.colliding = <span class="prelude-val">Some</span>(coll.<span class="number">1</span>.clone());
+                        <span class="kw">if </span>g2_is_solid {
+                            body.update_correct_y();
+                        }
+                    } 
+                }
             }
             <span class="kw">else </span>{
                 <span class="kw">if </span>!check_1 {
-                    <span class="kw">if </span><span class="self">self</span>.get(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>).has::&lt;Rigidbody&gt;() {
-                        <span class="kw">let </span>body = <span class="self">self</span>.state.get_mut(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>).get_mut::&lt;Rigidbody&gt;();
+                    <span class="kw">if </span><span class="self">self</span>.get(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>.uuid).has::&lt;Rigidbody&gt;() {
+                        <span class="kw">let </span>body = <span class="self">self</span>.state.get_mut(<span class="kw-2">&amp;</span>coll.<span class="number">0</span>.uuid).get_mut::&lt;Rigidbody&gt;();
                         body.colliding = <span class="prelude-val">None</span>;
                     } 
                 }
@@ -486,20 +489,23 @@
         <span class="self">self</span>.update_go(<span class="kw-2">&amp;mut </span>app);
     }
 
-    <span class="kw">fn </span>check_collision(<span class="kw-2">&amp;</span><span class="self">self</span>, coll: <span class="kw-2">&amp;mut </span>Vec&lt;(String, String, bool)&gt;) {
+    <span class="kw">fn </span>check_collision(<span class="kw-2">&amp;</span><span class="self">self</span>, coll: <span class="kw-2">&amp;mut </span>Vec&lt;(GameObjectId, GameObjectId, bool)&gt;) {
+        <span class="kw">let </span><span class="kw-2">mut </span>others = <span class="bool-val">false</span>;
         <span class="kw">for </span>(k, i) <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.state.gameobjects {
             <span class="kw">for </span>(k2, j) <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.state.gameobjects {
                 <span class="kw">if </span>k != k2 {
-                    <span class="kw">if </span>i.has::&lt;Rigidbody&gt;() &amp;&amp; j.has::&lt;Rigidbody&gt;() {
-                        <span class="kw">let </span>k3 = i.id.clone();
-
-                        <span class="kw">let </span>body = i.get::&lt;Rigidbody&gt;();
-                        <span class="kw">let </span>body2 = j.get::&lt;Rigidbody&gt;();
-                        <span class="kw">let </span>check =  body.check_collision(<span class="kw-2">&amp;</span>body2);
-
-                        coll.push((k3, k2.to_string(), check));
+                    others = <span class="bool-val">true</span>;
+                    
+                    <span class="kw">if </span>i.has::&lt;Rigidbody&gt;() {
+                        <span class="kw">if </span>j.has::&lt;Rigidbody&gt;() {
+                            <span class="kw">let </span>check =  i.get::&lt;Rigidbody&gt;().check_collision(<span class="kw-2">&amp;</span>j.get::&lt;Rigidbody&gt;());
+                            coll.push((i.id.clone(), j.id.clone(), check));
+                        }
                     }
                 }
+            }
+            <span class="kw">if </span>!others {
+                coll.push((i.id.clone(), i.id.clone(), <span class="bool-val">false</span>));
             }
         }
     }

@@ -123,52 +123,116 @@
 <a href="#123" id="123">123</a>
 <a href="#124" id="124">124</a>
 <a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
 </pre><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, hash::Hash};
-<span class="kw">use </span>sdl2::keyboard::Keycode;
+<span class="kw">use </span>sdl2::{keyboard::Keycode, mouse::MouseButton};
 <span class="kw">use </span><span class="kw">crate</span>::math::Vec2;
 
-<span class="doccomment">///Contains info needed for mappings
+<span class="doccomment">/// Contains info needed for mappings
 </span><span class="attr">#[derive(Debug, Eq, Copy, Clone, Hash, PartialEq)]
 </span><span class="kw">pub struct </span>InputInfo {
     <span class="kw">pub </span>pressed: bool,
+    <span class="kw">pub </span>pressed_down: bool,
+    <span class="kw">pub </span>changed: bool,
 }
 
-<span class="doccomment">///Contains info needed for bindings
+<span class="doccomment">/// Contains info needed for bindings
 </span><span class="attr">#[derive(Debug, Eq, Copy, Clone, Hash, PartialEq)]
 </span><span class="kw">pub struct </span>BindingInfo {
-    <span class="kw">pub </span>positive: Keycode,
-    <span class="kw">pub </span>negative: Keycode
+    <span class="doccomment">/// Bind for 1 value.
+    </span><span class="kw">pub </span>positive: Keycode,
+    <span class="doccomment">/// Bind for -1 value.
+    </span><span class="kw">pub </span>negative: Keycode
 }
 
-<span class="doccomment">///Direct key mappings and abstract bindings
+<span class="doccomment">/// Direct key mappings and abstract bindings
 </span><span class="attr">#[derive(Debug)]
 </span><span class="kw">pub struct </span>Input {
-    <span class="kw">pub </span>mappings: HashMap&lt;Keycode, InputInfo&gt;,
-    <span class="kw">pub </span>bindings: HashMap&lt;String, BindingInfo&gt;
+    <span class="doccomment">/// Key Mappings
+    </span><span class="kw">pub </span>mappings: HashMap&lt;Keycode, InputInfo&gt;,
+    <span class="doccomment">/// Mouse Mappings
+    </span><span class="kw">pub </span>mouse_mapping: HashMap&lt;MouseButton, InputInfo&gt;,
+    <span class="doccomment">/// Mouse Position
+    </span><span class="kw">pub </span>mouse_pos: Vec2,
+    <span class="doccomment">/// Abstract Key Bindings
+    </span><span class="kw">pub </span>bindings: HashMap&lt;String, BindingInfo&gt;,
 }
 
 <span class="kw">impl </span>Input {
     <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
         Input {
             mappings: HashMap::new(),
-            bindings: HashMap::new()
+            mouse_mapping: HashMap::new(),
+            mouse_pos: Vec2::ZERO,
+            bindings: HashMap::new(),
         }
     }
 
+    <span class="kw">pub fn </span>update_mouse_pos(<span class="kw-2">&amp;mut </span><span class="self">self</span>, pos : Vec2) {
+        <span class="self">self</span>.mouse_pos = pos;
+    }
+
     <span class="kw">pub fn </span>update_mapping(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keypair: (<span class="kw-2">&amp;</span>Keycode, <span class="kw-2">&amp;</span>InputInfo)) {
-        <span class="kw">let </span>a = <span class="self">self</span>.mappings.entry(<span class="kw-2">*</span>keypair.<span class="number">0</span>).or_insert(<span class="kw-2">*</span>keypair.<span class="number">1</span>);
-        
-        <span class="kw-2">*</span>a = <span class="kw-2">*</span>keypair.<span class="number">1</span>;
+        <span class="self">self</span>.mappings.insert(<span class="kw-2">*</span>keypair.<span class="number">0</span>, <span class="kw-2">*</span>keypair.<span class="number">1</span>);
+    }
+
+    <span class="kw">pub fn </span>update_mouse(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keypair: (<span class="kw-2">&amp;</span>MouseButton, <span class="kw-2">&amp;</span>InputInfo)) {
+        <span class="self">self</span>.mouse_mapping.insert(<span class="kw-2">*</span>keypair.<span class="number">0</span>, <span class="kw-2">*</span>keypair.<span class="number">1</span>);
     }
 
     <span class="kw">pub fn </span>update_binding(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keypair: (<span class="kw-2">&amp;</span>str, <span class="kw-2">&amp;</span>BindingInfo)) {
-        <span class="kw">let </span>a = <span class="self">self</span>.bindings.entry(keypair.<span class="number">0</span>.to_string()).or_insert(<span class="kw-2">*</span>keypair.<span class="number">1</span>);
-        
-        <span class="kw-2">*</span>a = <span class="kw-2">*</span>keypair.<span class="number">1</span>;
+        <span class="self">self</span>.bindings.insert(keypair.<span class="number">0</span>.to_string(), <span class="kw-2">*</span>keypair.<span class="number">1</span>);
     }
     
     <span class="kw">pub fn </span>get_mapping(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: Keycode) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>InputInfo&gt; {
         <span class="self">self</span>.mappings.get_mut(<span class="kw-2">&amp;</span>key)
+    }
+
+    <span class="kw">pub fn </span>get_mouse_mapping(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: MouseButton) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>InputInfo&gt; {
+        <span class="self">self</span>.mouse_mapping.get_mut(<span class="kw-2">&amp;</span>key)
     }
 
     <span class="kw">pub fn </span>get_binding(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>BindingInfo&gt; {
@@ -185,12 +249,36 @@
         }
     }
 
-    <span class="doccomment">///Get key down this frame
+    <span class="doccomment">/// Get mouse pressed
+    </span><span class="kw">pub fn </span>get_mouse(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: MouseButton) -&gt; bool {
+        <span class="kw">match  </span><span class="self">self</span>.get_mouse_mapping(key) {
+            <span class="prelude-val">Some</span>(p) =&gt; p.pressed,
+            <span class="prelude-val">None </span>=&gt; {
+                <span class="bool-val">false
+            </span>}
+        }
+    }
+
+    <span class="doccomment">/// Get key down this frame
     </span><span class="kw">pub fn </span>get_key_down(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: Keycode) -&gt; bool {
         <span class="kw">match  </span><span class="self">self</span>.get_mapping(key) {
             <span class="prelude-val">Some</span>(p) =&gt; {
-                <span class="kw">let </span>ret = p.pressed;
-                p.pressed = <span class="bool-val">false</span>;
+                <span class="kw">let </span>ret = p.pressed_down;
+                p.pressed_down = <span class="bool-val">false</span>;
+                ret
+            }
+            <span class="prelude-val">None </span>=&gt; {
+                <span class="bool-val">false
+            </span>}
+        }
+    }
+
+    <span class="doccomment">/// Get mouse down this frame
+    </span><span class="kw">pub fn </span>get_mouse_down(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: MouseButton) -&gt; bool {
+        <span class="kw">match  </span><span class="self">self</span>.get_mouse_mapping(key) {
+            <span class="prelude-val">Some</span>(p) =&gt; {
+                <span class="kw">let </span>ret = p.pressed_down;
+                p.pressed_down = <span class="bool-val">false</span>;
                 ret
             }
             <span class="prelude-val">None </span>=&gt; {
@@ -199,12 +287,12 @@
         }
     }
     
-    <span class="doccomment">///Get Vec2 from two bindings
+    <span class="doccomment">/// Get Vec2 from two bindings
     </span><span class="kw">pub fn </span>bind_to_2d(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str, key2: <span class="kw-2">&amp;</span>str) -&gt; Vec2 {
         Vec2::new(<span class="self">self</span>.bind_to_axis(key) <span class="kw">as </span>f64, <span class="self">self</span>.bind_to_axis(key2) <span class="kw">as </span>f64)
     }
 
-    <span class="doccomment">///Get axis from -1,1 from binding 
+    <span class="doccomment">/// Get axis from -1,1 from binding 
     </span><span class="kw">pub fn </span>bind_to_axis(<span class="kw-2">&amp;mut </span><span class="self">self</span>, axis: <span class="kw-2">&amp;</span>str) -&gt; i32 {
         <span class="kw">let </span>ax = <span class="kw">match </span><span class="self">self</span>.get_binding(axis) {
             <span class="prelude-val">Some</span>(p) =&gt; {

@@ -1,1 +1,1 @@
-window.ALL_CRATES = ["bitflags","c_vec","glob","lazy_static","libc","lilah","ruwren","sdl2","sdl2_sys","wren_sys"];
+window.ALL_CRATES = ["bitflags","c_vec","cfg_if","debug_print","getrandom","glob","lazy_static","libc","lilah","ppv_lite86","proc_macro2","quote","rand","rand_chacha","rand_core","ruwren","sdl2","sdl2_sys","syn","unicode_ident","uuid","uuid_macro_internal","wren_sys"];

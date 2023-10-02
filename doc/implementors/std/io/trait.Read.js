@@ -1,3 +1,4 @@
 (function() {var implementors = {
+"rand_core":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.68.2/std/io/trait.Read.html\" title=\"trait std::io::Read\">Read</a> for dyn <a class=\"trait\" href=\"rand_core/trait.RngCore.html\" title=\"trait rand_core::RngCore\">RngCore</a>"]],
 "sdl2":[["impl&lt;'a&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.68.2/std/io/trait.Read.html\" title=\"trait std::io::Read\">Read</a> for <a class=\"struct\" href=\"sdl2/rwops/struct.RWops.html\" title=\"struct sdl2::rwops::RWops\">RWops</a>&lt;'a&gt;"]]
 };if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

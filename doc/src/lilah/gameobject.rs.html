@@ -271,12 +271,109 @@
 <a href="#271" id="271">271</a>
 <a href="#272" id="272">272</a>
 <a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
+<a href="#334" id="334">334</a>
+<a href="#335" id="335">335</a>
+<a href="#336" id="336">336</a>
+<a href="#337" id="337">337</a>
+<a href="#338" id="338">338</a>
+<a href="#339" id="339">339</a>
+<a href="#340" id="340">340</a>
+<a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
+<a href="#343" id="343">343</a>
+<a href="#344" id="344">344</a>
+<a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
+<a href="#356" id="356">356</a>
+<a href="#357" id="357">357</a>
+<a href="#358" id="358">358</a>
+<a href="#359" id="359">359</a>
+<a href="#360" id="360">360</a>
+<a href="#361" id="361">361</a>
+<a href="#362" id="362">362</a>
+<a href="#363" id="363">363</a>
+<a href="#364" id="364">364</a>
+<a href="#365" id="365">365</a>
+<a href="#366" id="366">366</a>
+<a href="#367" id="367">367</a>
+<a href="#368" id="368">368</a>
+<a href="#369" id="369">369</a>
 </pre><pre class="rust"><code><span class="kw">use </span>std::{collections::{HashMap, hash_map::DefaultHasher}, hash::{Hasher, Hash}};
 
 <span class="kw">use </span>ruwren::{send_foreign, VM, Class, ModuleLibrary, create_module, SlotType, FunctionSignature, get_slot_checked};
 <span class="kw">use </span>sdl2::render::Texture;
 
-<span class="kw">use crate</span>::{components::{Component, Transform, Sprite, Rigidbody, Animator, Tickable}, math::Vec2, application::App};
+<span class="kw">use crate</span>::{components::{Component, Transform, Sprite, Rigidbody, Animator, Tickable, ComponentBehaviour}, math::Vec2, application::App};
+<span class="kw">use </span>uuid::Uuid;
 
 <span class="attr">#[macro_export]
 </span><span class="macro">macro_rules! </span>mut_all {
@@ -304,16 +401,33 @@
     };
 }
 
+<span class="doccomment">/// Used for identifying Gameobject
+</span><span class="attr">#[derive(Clone, PartialEq)]
+</span><span class="kw">pub struct </span>GameObjectId {
+    <span class="kw">pub </span>name: String,
+    <span class="doccomment">/// UUID generated randomly per execution. Do not rely on being the same between plays.
+    </span><span class="kw">pub </span>uuid: String
+}
+<span class="kw">impl </span>GameObjectId {
+    <span class="kw">pub fn </span>new(name: String) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            name: name,
+            uuid: Uuid::new_v4().to_string()
+        }
+    }
+}
+
 <span class="kw">pub struct </span>GameObject {
-    <span class="kw">pub </span>id : String,
-    <span class="kw">pub </span>num_id : usize,
-    <span class="kw">pub </span>frame : usize,
+    <span class="kw">pub </span>id : GameObjectId,
+    <span class="kw">pub </span>wren_id : usize,
     <span class="kw">pub </span>components: Vec&lt;Box&lt;<span class="kw">dyn </span>Component&gt;&gt;,
+    <span class="kw">pub </span>init: bool,
+    <span class="kw">pub </span>start: bool,
 } 
 
 <span class="kw">impl </span>Clone <span class="kw">for </span>GameObject {
     <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
-        <span class="kw">let </span><span class="kw-2">mut </span>g = <span class="self">Self </span>{ id : <span class="self">self</span>.id.clone(), components: <span class="macro">vec!</span>(), frame: <span class="number">0</span>, num_id: <span class="self">self</span>.num_id, };
+        <span class="kw">let </span><span class="kw-2">mut </span>g = <span class="self">Self </span>{ id : <span class="self">self</span>.id.clone(), components: <span class="macro">vec!</span>(), wren_id: <span class="self">self</span>.wren_id, init: <span class="self">self</span>.init, start: <span class="self">self</span>.start };
 
         <span class="kw">for </span>i <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.components {
             g.components.push(i.clone_dyn());
@@ -331,31 +445,38 @@
 }
 
 <span class="kw">impl </span>GameObject {
-    <span class="kw">pub fn </span>new(id : String) -&gt; <span class="self">Self </span>{
+    <span class="kw">pub fn </span>new(name : String) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
-            id,
-            frame : <span class="number">0</span>,
+            id: GameObjectId::new(name),
             components: <span class="macro">vec!</span>[],
-            num_id: <span class="number">0</span>,
+            wren_id: <span class="number">0</span>,
+            init: <span class="bool-val">false</span>, 
+            start: <span class="bool-val">false</span>,
         }
-    }
-
-    <span class="kw">pub fn </span>get_hash(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
-        <span class="kw">let </span><span class="kw-2">mut </span>s = DefaultHasher::new();
-        <span class="self">self</span>.id.hash(<span class="kw-2">&amp;mut </span>s);
-        <span class="self">self</span>.num_id.hash(<span class="kw-2">&amp;mut </span>s);
-        s.finish()
     }
 
     <span class="kw">pub fn </span>load(<span class="kw-2">&amp;mut </span><span class="self">self</span>, tex: <span class="kw-2">&amp;</span>HashMap&lt;String, Texture&gt;) {
+        <span class="kw">if </span><span class="self">self</span>.init {
+            <span class="self">self</span>.start = <span class="bool-val">true</span>;
+            <span class="kw">return</span>;
+        }
+
         <span class="kw">if </span><span class="self">self</span>.has::&lt;Sprite&gt;() {
             <span class="self">self</span>.get_mut::&lt;Sprite&gt;().load(tex);
         }
-        <span class="kw">if </span><span class="self">self</span>.has::&lt;Rigidbody&gt;() &amp;&amp; <span class="self">self</span>.has::&lt;Sprite&gt;() {
-            <span class="kw">let </span>sprite_size = <span class="self">self</span>.get::&lt;Sprite&gt;().size;
-            <span class="kw">let </span>body = <span class="self">self</span>.get_mut::&lt;Rigidbody&gt;();  
-            body.bounds = Vec2::new(sprite_size.<span class="number">0 </span><span class="kw">as </span>f64, sprite_size.<span class="number">1 </span><span class="kw">as </span>f64);
-        } 
+        <span class="kw">if </span><span class="self">self</span>.has::&lt;Rigidbody&gt;() {
+            <span class="kw">if </span><span class="self">self</span>.has::&lt;Sprite&gt;() {
+                <span class="kw">let </span>sprite_size = <span class="self">self</span>.get::&lt;Sprite&gt;().get_size();
+                <span class="kw">let </span>body = <span class="self">self</span>.get_mut::&lt;Rigidbody&gt;();  
+                body.bounds = Vec2::new(sprite_size.<span class="number">0 </span><span class="kw">as </span>f64, sprite_size.<span class="number">1 </span><span class="kw">as </span>f64);
+            }
+            <span class="kw">if </span><span class="self">self</span>.has::&lt;Transform&gt;() {
+                <span class="kw">let </span>p = <span class="self">self</span>.get::&lt;Transform&gt;().position;
+                <span class="self">self</span>.get_mut::&lt;Rigidbody&gt;().position = p;
+            }
+        }
+
+        <span class="self">self</span>.init = <span class="bool-val">true</span>;
     }
 
     <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, app: <span class="kw-2">&amp;mut </span>App) {
@@ -363,22 +484,20 @@
         <span class="macro">tick_component!</span>(Transform, Rigidbody, <span class="self">self</span>, app);
         <span class="macro">tick_component!</span>(Animator, Sprite, <span class="self">self</span>, app);
         <span class="macro">tick_component!</span>(Sprite, Animator, <span class="self">self</span>, app);
-        
-        <span class="self">self</span>.frame += <span class="number">1</span>;
-        <span class="kw">if </span><span class="self">self</span>.frame &gt; usize::MAX {
-            <span class="self">self</span>.frame = <span class="number">2</span>;
-        }
     }
     
-    <span class="kw">pub fn </span>push_component&lt;T: <span class="lifetime">&#39;static </span>+ Component + Default&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+    <span class="doccomment">/// Push component to GameObject with defaults
+    </span><span class="kw">pub fn </span>push_component&lt;T: <span class="lifetime">&#39;static </span>+ Component + Default&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.components.push(Box::new(T::default()));
     }
     
-    <span class="kw">pub fn </span>push_component_specific&lt;T: <span class="lifetime">&#39;static </span>+ Component + Default&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, c: T) {
+    <span class="doccomment">/// Push component to GameObject with constructor
+    </span><span class="kw">pub fn </span>push_component_specific&lt;T: <span class="lifetime">&#39;static </span>+ Component&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, c: T) {
         <span class="self">self</span>.components.push(Box::new(c));
     }
     
-    <span class="kw">pub fn </span>wrap_component&lt;T: <span class="lifetime">&#39;static</span>&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt; {
+    <span class="doccomment">/// Gets Component but wraps it in Option in the case that it does not exist.
+    </span><span class="kw">pub fn </span>wrap_component&lt;T: <span class="lifetime">&#39;static </span>+ Component&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt; {
         <span class="kw">for </span>comp <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.components {
             <span class="kw">match </span>comp.as_any().downcast_ref::&lt;T&gt;() {
                 <span class="prelude-val">Some</span>(val) =&gt; <span class="kw">return </span><span class="prelude-val">Some</span>(val),
@@ -388,14 +507,16 @@
         <span class="prelude-val">None
     </span>}
 
-    <span class="kw">pub fn </span>has&lt;T: <span class="lifetime">&#39;static</span>&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="doccomment">/// Checks if Component exist.
+    </span><span class="kw">pub fn </span>has&lt;T: <span class="lifetime">&#39;static </span>+ Component&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">match </span><span class="self">self</span>.wrap_component::&lt;T&gt;() {
             <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
             <span class="prelude-val">None </span>=&gt; <span class="bool-val">false
         </span>}
     }
 
-    <span class="kw">pub fn </span>get&lt;T: <span class="lifetime">&#39;static</span>&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>T {
+    <span class="doccomment">/// Gets Component but will panic if it does not exist.
+    </span><span class="kw">pub fn </span>get&lt;T: <span class="lifetime">&#39;static </span>+ Component&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>T {
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="prelude-val">None</span>;
         <span class="kw">for </span>comp <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.components {
             <span class="kw">match </span>comp.as_any().downcast_ref::&lt;T&gt;() {
@@ -409,7 +530,8 @@
         <span class="kw">return </span>ret.unwrap();
     }
 
-    <span class="kw">pub fn </span>get_mut&lt;T: <span class="lifetime">&#39;static</span>&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>T {
+    <span class="doccomment">/// Gets Mutable Component but will panic if it does not exist. 
+    </span><span class="kw">pub fn </span>get_mut&lt;T: <span class="lifetime">&#39;static </span>+ Component&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>T {
         <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="prelude-val">None</span>;
         <span class="kw">for </span>comp <span class="kw">in </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.components {
             <span class="kw">match </span>comp.as_any_mut().downcast_mut::&lt;T&gt;() {
@@ -422,8 +544,9 @@
         }
         <span class="kw">return </span>ret.unwrap();
     }
-    
-    <span class="kw">pub fn </span>wrap_component_mut&lt;T: <span class="lifetime">&#39;static</span>&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>T&gt; {
+
+    <span class="doccomment">/// Gets Mutable Component but wraps it in Option in the case that it does not exist.
+    </span><span class="kw">pub fn </span>wrap_component_mut&lt;T: <span class="lifetime">&#39;static </span>+ Component&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>T&gt; {
         <span class="kw">for </span>comp <span class="kw">in </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.components {
             <span class="kw">match </span>comp.as_any_mut().downcast_mut::&lt;T&gt;() {
                 <span class="prelude-val">Some</span>(val) =&gt; <span class="kw">return </span><span class="prelude-val">Some</span>(val),
@@ -433,7 +556,8 @@
         <span class="prelude-val">None
     </span>}
     
-    <span class="kw">pub fn </span>wrap_all&lt;T: <span class="lifetime">&#39;static</span>&gt;(&amp; <span class="self">self</span>) -&gt; Vec&lt;&amp; T&gt; {
+    <span class="doccomment">/// Gets all Components of Type T 
+    </span><span class="kw">pub fn </span>wrap_all&lt;T: <span class="lifetime">&#39;static </span>+ Component&gt;(&amp; <span class="self">self</span>) -&gt; Vec&lt;&amp; T&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>comps = <span class="macro">vec!</span>[];
         <span class="kw">for </span>comp <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.components {
             comps.push ( <span class="kw">match </span>comp.as_any().downcast_ref::&lt;T&gt;() {
@@ -444,7 +568,7 @@
         comps
     }
     
-    <span class="kw">pub fn </span>wrap_all_mut&lt;T: <span class="lifetime">&#39;static</span>&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Vec&lt;<span class="kw-2">&amp;mut </span>T&gt; {
+    <span class="kw">pub fn </span>wrap_all_mut&lt;T: <span class="lifetime">&#39;static </span>+ Component&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Vec&lt;<span class="kw-2">&amp;mut </span>T&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>comps = <span class="macro">vec!</span>[];
         <span class="kw">for </span>comp <span class="kw">in </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.components {
             comps.push ( <span class="kw">match </span>comp.as_any_mut().downcast_mut::&lt;T&gt;() {
@@ -478,8 +602,28 @@
     </span>}
     <span class="comment">//builder end
 
+    //wren stuff
     </span><span class="kw">pub fn </span>wren_getter_id(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
-        vm.set_slot_string(<span class="number">0</span>, <span class="self">self</span>.id.clone());
+        vm.set_slot_new_map(<span class="number">0</span>);
+        vm.set_slot_string(<span class="number">1</span>, <span class="string">&quot;name&quot;</span>);
+        vm.set_slot_string(<span class="number">2</span>, <span class="self">self</span>.id.name.clone());
+        vm.set_map_value(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>);
+        vm.set_slot_string(<span class="number">1</span>, <span class="string">&quot;uuid&quot;</span>);
+        vm.set_slot_string(<span class="number">2</span>, <span class="self">self</span>.id.uuid.clone());
+        vm.set_map_value(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>);
+    }
+
+    <span class="kw">pub fn </span>wren_setter_name(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">let </span>new_name = <span class="macro">get_slot_checked!</span>(vm =&gt; string <span class="number">1</span>);
+        <span class="self">self</span>.id.name = new_name;
+    }
+
+    <span class="kw">pub fn </span>wren_getter_name(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        vm.set_slot_string(<span class="number">0</span>, <span class="self">self</span>.id.name.clone());    
+    }
+
+    <span class="kw">pub fn </span>wren_getter_uuid(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        vm.set_slot_string(<span class="number">0</span>, <span class="self">self</span>.id.uuid.clone());    
     }
 
     <span class="kw">pub fn </span>send_to_wren(<span class="kw-2">&amp;</span><span class="self">self</span>, slot : usize, vm : <span class="kw-2">&amp;</span>VM) {
@@ -491,28 +635,36 @@
         <span class="self">self</span>.components.push(c.clone_dyn());
     }
 
-    <span class="comment">// pub fn wren_get_frames(&amp;self, vm : &amp;VM) {
-    //     vm.set_slot_double(0, self.frame as f64);
-    // }
-
-    // pub fn wren_set_frames(&amp;mut self, vm : &amp;VM) {
-    //     self.frame = vm.get_slot_double(1).unwrap() as usize;
-    // }
-
-    </span><span class="kw">pub fn </span>wren_get_component(<span class="kw-2">&amp;</span><span class="self">self</span>, vm : <span class="kw-2">&amp;</span>VM) {
+    <span class="kw">pub fn </span>wren_get_component(<span class="kw-2">&amp;</span><span class="self">self</span>, vm : <span class="kw-2">&amp;</span>VM) {
         <span class="kw">let </span>c = vm.get_slot_string(<span class="number">1</span>).unwrap();
         <span class="kw">for </span>i <span class="kw">in </span><span class="self">self</span>.components.iter().enumerate() {
-            <span class="comment">//vm.get_list_element(2, i.0 as i32, 3);
-            //let a = vm.get_slot_foreign::&lt;Box&lt;dyn Component&gt;&gt;(3).unwrap();
-            </span><span class="kw">match </span>c.as_str() {
-                <span class="string">&quot;transform&quot; </span>=&gt; {
+            <span class="kw">match </span>c.as_str() {
+                <span class="string">&quot;Transform&quot; </span>=&gt; {
                     <span class="kw">if let </span><span class="prelude-val">Some</span>(b) = i.<span class="number">1</span>.as_any().downcast_ref::&lt;Transform&gt;() {
                         b.send_to_wren(<span class="number">0</span>, vm);
                         <span class="kw">return</span>;
                     }
                 }
-                <span class="string">&quot;sprite&quot; </span>=&gt; {
+                <span class="string">&quot;Sprite&quot; </span>=&gt; {
                     <span class="kw">if let </span><span class="prelude-val">Some</span>(b) = i.<span class="number">1</span>.as_any().downcast_ref::&lt;Sprite&gt;() {
+                        b.send_to_wren(<span class="number">0</span>, vm);
+                        <span class="kw">return</span>;
+                    }
+                }
+                <span class="string">&quot;Rigidbody&quot; </span>=&gt; {
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(b) = i.<span class="number">1</span>.as_any().downcast_ref::&lt;Rigidbody&gt;() {
+                        b.send_to_wren(<span class="number">0</span>, vm);
+                        <span class="kw">return</span>;
+                    }
+                }
+                <span class="string">&quot;Animator&quot; </span>=&gt; {
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(b) = i.<span class="number">1</span>.as_any().downcast_ref::&lt;Animator&gt;() {
+                        b.send_to_wren(<span class="number">0</span>, vm);
+                        <span class="kw">return</span>;
+                    }
+                }
+                <span class="string">&quot;ComponentBehaviour&quot; </span>=&gt; {
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(b) = i.<span class="number">1</span>.as_any().downcast_ref::&lt;ComponentBehaviour&gt;() {
                         b.send_to_wren(<span class="number">0</span>, vm);
                         <span class="kw">return</span>;
                     }
@@ -529,11 +681,51 @@
 
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.components.len() {
             <span class="kw">match </span>component_str.as_str() {
-                <span class="string">&quot;transform&quot; </span>=&gt; {
+                <span class="string">&quot;Transform&quot; </span>=&gt; {
                     <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign::&lt;Box&lt;<span class="kw">dyn </span>Component&gt;&gt;(<span class="number">2</span>) {
                         <span class="kw">if let </span>(<span class="prelude-val">Some</span>(a), <span class="prelude-val">Some</span>(b)) = 
                         (<span class="self">self</span>.components[i].as_any_mut().downcast_mut::&lt;Transform&gt;(),
                         comp.as_any().downcast_ref::&lt;Transform&gt;()) {
+                            <span class="self">self</span>.components[i] = b.clone_dyn();
+                            <span class="kw">return</span>;
+                        }
+                    }
+                }
+                <span class="string">&quot;Sprite&quot; </span>=&gt; {
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign::&lt;Box&lt;<span class="kw">dyn </span>Component&gt;&gt;(<span class="number">2</span>) {
+                        <span class="kw">if let </span>(<span class="prelude-val">Some</span>(a), <span class="prelude-val">Some</span>(b)) = 
+                        (<span class="self">self</span>.components[i].as_any_mut().downcast_mut::&lt;Sprite&gt;(),
+                        comp.as_any().downcast_ref::&lt;Sprite&gt;()) {
+                            <span class="self">self</span>.components[i] = b.clone_dyn();
+                            <span class="kw">return</span>;
+                        }
+                    }
+                }
+                <span class="string">&quot;Rigidbody&quot; </span>=&gt; {
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign::&lt;Box&lt;<span class="kw">dyn </span>Component&gt;&gt;(<span class="number">2</span>) {
+                        <span class="kw">if let </span>(<span class="prelude-val">Some</span>(a), <span class="prelude-val">Some</span>(b)) = 
+                        (<span class="self">self</span>.components[i].as_any_mut().downcast_mut::&lt;Rigidbody&gt;(),
+                        comp.as_any().downcast_ref::&lt;Rigidbody&gt;()) {
+                            <span class="self">self</span>.components[i] = b.clone_dyn();
+                            <span class="kw">return</span>;
+                        }
+                    }
+                }
+                <span class="string">&quot;Animator&quot; </span>=&gt; {
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign::&lt;Box&lt;<span class="kw">dyn </span>Component&gt;&gt;(<span class="number">2</span>) {
+                        <span class="kw">if let </span>(<span class="prelude-val">Some</span>(a), <span class="prelude-val">Some</span>(b)) = 
+                        (<span class="self">self</span>.components[i].as_any_mut().downcast_mut::&lt;Animator&gt;(),
+                        comp.as_any().downcast_ref::&lt;Animator&gt;()) {
+                            <span class="self">self</span>.components[i] = b.clone_dyn();
+                            <span class="kw">return</span>;
+                        }
+                    }
+                }
+                <span class="string">&quot;ComponentBehaviour&quot; </span>=&gt; {
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign::&lt;Box&lt;<span class="kw">dyn </span>Component&gt;&gt;(<span class="number">2</span>) {
+                        <span class="kw">if let </span>(<span class="prelude-val">Some</span>(a), <span class="prelude-val">Some</span>(b)) = 
+                        (<span class="self">self</span>.components[i].as_any_mut().downcast_mut::&lt;ComponentBehaviour&gt;(),
+                        comp.as_any().downcast_ref::&lt;ComponentBehaviour&gt;()) {
                             <span class="self">self</span>.components[i] = b.clone_dyn();
                             <span class="kw">return</span>;
                         }

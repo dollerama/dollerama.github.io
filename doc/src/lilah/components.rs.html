@@ -536,40 +536,547 @@
 <a href="#536" id="536">536</a>
 <a href="#537" id="537">537</a>
 <a href="#538" id="538">538</a>
-</pre><pre class="rust"><code><span class="kw">use </span>ruwren::{Class, VM, send_foreign, get_slot_checked, create_module, ModuleLibrary};
+<a href="#539" id="539">539</a>
+<a href="#540" id="540">540</a>
+<a href="#541" id="541">541</a>
+<a href="#542" id="542">542</a>
+<a href="#543" id="543">543</a>
+<a href="#544" id="544">544</a>
+<a href="#545" id="545">545</a>
+<a href="#546" id="546">546</a>
+<a href="#547" id="547">547</a>
+<a href="#548" id="548">548</a>
+<a href="#549" id="549">549</a>
+<a href="#550" id="550">550</a>
+<a href="#551" id="551">551</a>
+<a href="#552" id="552">552</a>
+<a href="#553" id="553">553</a>
+<a href="#554" id="554">554</a>
+<a href="#555" id="555">555</a>
+<a href="#556" id="556">556</a>
+<a href="#557" id="557">557</a>
+<a href="#558" id="558">558</a>
+<a href="#559" id="559">559</a>
+<a href="#560" id="560">560</a>
+<a href="#561" id="561">561</a>
+<a href="#562" id="562">562</a>
+<a href="#563" id="563">563</a>
+<a href="#564" id="564">564</a>
+<a href="#565" id="565">565</a>
+<a href="#566" id="566">566</a>
+<a href="#567" id="567">567</a>
+<a href="#568" id="568">568</a>
+<a href="#569" id="569">569</a>
+<a href="#570" id="570">570</a>
+<a href="#571" id="571">571</a>
+<a href="#572" id="572">572</a>
+<a href="#573" id="573">573</a>
+<a href="#574" id="574">574</a>
+<a href="#575" id="575">575</a>
+<a href="#576" id="576">576</a>
+<a href="#577" id="577">577</a>
+<a href="#578" id="578">578</a>
+<a href="#579" id="579">579</a>
+<a href="#580" id="580">580</a>
+<a href="#581" id="581">581</a>
+<a href="#582" id="582">582</a>
+<a href="#583" id="583">583</a>
+<a href="#584" id="584">584</a>
+<a href="#585" id="585">585</a>
+<a href="#586" id="586">586</a>
+<a href="#587" id="587">587</a>
+<a href="#588" id="588">588</a>
+<a href="#589" id="589">589</a>
+<a href="#590" id="590">590</a>
+<a href="#591" id="591">591</a>
+<a href="#592" id="592">592</a>
+<a href="#593" id="593">593</a>
+<a href="#594" id="594">594</a>
+<a href="#595" id="595">595</a>
+<a href="#596" id="596">596</a>
+<a href="#597" id="597">597</a>
+<a href="#598" id="598">598</a>
+<a href="#599" id="599">599</a>
+<a href="#600" id="600">600</a>
+<a href="#601" id="601">601</a>
+<a href="#602" id="602">602</a>
+<a href="#603" id="603">603</a>
+<a href="#604" id="604">604</a>
+<a href="#605" id="605">605</a>
+<a href="#606" id="606">606</a>
+<a href="#607" id="607">607</a>
+<a href="#608" id="608">608</a>
+<a href="#609" id="609">609</a>
+<a href="#610" id="610">610</a>
+<a href="#611" id="611">611</a>
+<a href="#612" id="612">612</a>
+<a href="#613" id="613">613</a>
+<a href="#614" id="614">614</a>
+<a href="#615" id="615">615</a>
+<a href="#616" id="616">616</a>
+<a href="#617" id="617">617</a>
+<a href="#618" id="618">618</a>
+<a href="#619" id="619">619</a>
+<a href="#620" id="620">620</a>
+<a href="#621" id="621">621</a>
+<a href="#622" id="622">622</a>
+<a href="#623" id="623">623</a>
+<a href="#624" id="624">624</a>
+<a href="#625" id="625">625</a>
+<a href="#626" id="626">626</a>
+<a href="#627" id="627">627</a>
+<a href="#628" id="628">628</a>
+<a href="#629" id="629">629</a>
+<a href="#630" id="630">630</a>
+<a href="#631" id="631">631</a>
+<a href="#632" id="632">632</a>
+<a href="#633" id="633">633</a>
+<a href="#634" id="634">634</a>
+<a href="#635" id="635">635</a>
+<a href="#636" id="636">636</a>
+<a href="#637" id="637">637</a>
+<a href="#638" id="638">638</a>
+<a href="#639" id="639">639</a>
+<a href="#640" id="640">640</a>
+<a href="#641" id="641">641</a>
+<a href="#642" id="642">642</a>
+<a href="#643" id="643">643</a>
+<a href="#644" id="644">644</a>
+<a href="#645" id="645">645</a>
+<a href="#646" id="646">646</a>
+<a href="#647" id="647">647</a>
+<a href="#648" id="648">648</a>
+<a href="#649" id="649">649</a>
+<a href="#650" id="650">650</a>
+<a href="#651" id="651">651</a>
+<a href="#652" id="652">652</a>
+<a href="#653" id="653">653</a>
+<a href="#654" id="654">654</a>
+<a href="#655" id="655">655</a>
+<a href="#656" id="656">656</a>
+<a href="#657" id="657">657</a>
+<a href="#658" id="658">658</a>
+<a href="#659" id="659">659</a>
+<a href="#660" id="660">660</a>
+<a href="#661" id="661">661</a>
+<a href="#662" id="662">662</a>
+<a href="#663" id="663">663</a>
+<a href="#664" id="664">664</a>
+<a href="#665" id="665">665</a>
+<a href="#666" id="666">666</a>
+<a href="#667" id="667">667</a>
+<a href="#668" id="668">668</a>
+<a href="#669" id="669">669</a>
+<a href="#670" id="670">670</a>
+<a href="#671" id="671">671</a>
+<a href="#672" id="672">672</a>
+<a href="#673" id="673">673</a>
+<a href="#674" id="674">674</a>
+<a href="#675" id="675">675</a>
+<a href="#676" id="676">676</a>
+<a href="#677" id="677">677</a>
+<a href="#678" id="678">678</a>
+<a href="#679" id="679">679</a>
+<a href="#680" id="680">680</a>
+<a href="#681" id="681">681</a>
+<a href="#682" id="682">682</a>
+<a href="#683" id="683">683</a>
+<a href="#684" id="684">684</a>
+<a href="#685" id="685">685</a>
+<a href="#686" id="686">686</a>
+<a href="#687" id="687">687</a>
+<a href="#688" id="688">688</a>
+<a href="#689" id="689">689</a>
+<a href="#690" id="690">690</a>
+<a href="#691" id="691">691</a>
+<a href="#692" id="692">692</a>
+<a href="#693" id="693">693</a>
+<a href="#694" id="694">694</a>
+<a href="#695" id="695">695</a>
+<a href="#696" id="696">696</a>
+<a href="#697" id="697">697</a>
+<a href="#698" id="698">698</a>
+<a href="#699" id="699">699</a>
+<a href="#700" id="700">700</a>
+<a href="#701" id="701">701</a>
+<a href="#702" id="702">702</a>
+<a href="#703" id="703">703</a>
+<a href="#704" id="704">704</a>
+<a href="#705" id="705">705</a>
+<a href="#706" id="706">706</a>
+<a href="#707" id="707">707</a>
+<a href="#708" id="708">708</a>
+<a href="#709" id="709">709</a>
+<a href="#710" id="710">710</a>
+<a href="#711" id="711">711</a>
+<a href="#712" id="712">712</a>
+<a href="#713" id="713">713</a>
+<a href="#714" id="714">714</a>
+<a href="#715" id="715">715</a>
+<a href="#716" id="716">716</a>
+<a href="#717" id="717">717</a>
+<a href="#718" id="718">718</a>
+<a href="#719" id="719">719</a>
+<a href="#720" id="720">720</a>
+<a href="#721" id="721">721</a>
+<a href="#722" id="722">722</a>
+<a href="#723" id="723">723</a>
+<a href="#724" id="724">724</a>
+<a href="#725" id="725">725</a>
+<a href="#726" id="726">726</a>
+<a href="#727" id="727">727</a>
+<a href="#728" id="728">728</a>
+<a href="#729" id="729">729</a>
+<a href="#730" id="730">730</a>
+<a href="#731" id="731">731</a>
+<a href="#732" id="732">732</a>
+<a href="#733" id="733">733</a>
+<a href="#734" id="734">734</a>
+<a href="#735" id="735">735</a>
+<a href="#736" id="736">736</a>
+<a href="#737" id="737">737</a>
+<a href="#738" id="738">738</a>
+<a href="#739" id="739">739</a>
+<a href="#740" id="740">740</a>
+<a href="#741" id="741">741</a>
+<a href="#742" id="742">742</a>
+<a href="#743" id="743">743</a>
+<a href="#744" id="744">744</a>
+<a href="#745" id="745">745</a>
+<a href="#746" id="746">746</a>
+<a href="#747" id="747">747</a>
+<a href="#748" id="748">748</a>
+<a href="#749" id="749">749</a>
+<a href="#750" id="750">750</a>
+<a href="#751" id="751">751</a>
+<a href="#752" id="752">752</a>
+<a href="#753" id="753">753</a>
+<a href="#754" id="754">754</a>
+<a href="#755" id="755">755</a>
+<a href="#756" id="756">756</a>
+<a href="#757" id="757">757</a>
+<a href="#758" id="758">758</a>
+<a href="#759" id="759">759</a>
+<a href="#760" id="760">760</a>
+<a href="#761" id="761">761</a>
+<a href="#762" id="762">762</a>
+<a href="#763" id="763">763</a>
+<a href="#764" id="764">764</a>
+<a href="#765" id="765">765</a>
+<a href="#766" id="766">766</a>
+<a href="#767" id="767">767</a>
+<a href="#768" id="768">768</a>
+<a href="#769" id="769">769</a>
+<a href="#770" id="770">770</a>
+<a href="#771" id="771">771</a>
+<a href="#772" id="772">772</a>
+<a href="#773" id="773">773</a>
+<a href="#774" id="774">774</a>
+<a href="#775" id="775">775</a>
+<a href="#776" id="776">776</a>
+<a href="#777" id="777">777</a>
+<a href="#778" id="778">778</a>
+<a href="#779" id="779">779</a>
+<a href="#780" id="780">780</a>
+<a href="#781" id="781">781</a>
+<a href="#782" id="782">782</a>
+<a href="#783" id="783">783</a>
+<a href="#784" id="784">784</a>
+<a href="#785" id="785">785</a>
+<a href="#786" id="786">786</a>
+<a href="#787" id="787">787</a>
+<a href="#788" id="788">788</a>
+<a href="#789" id="789">789</a>
+<a href="#790" id="790">790</a>
+<a href="#791" id="791">791</a>
+<a href="#792" id="792">792</a>
+<a href="#793" id="793">793</a>
+<a href="#794" id="794">794</a>
+<a href="#795" id="795">795</a>
+<a href="#796" id="796">796</a>
+<a href="#797" id="797">797</a>
+<a href="#798" id="798">798</a>
+<a href="#799" id="799">799</a>
+<a href="#800" id="800">800</a>
+<a href="#801" id="801">801</a>
+<a href="#802" id="802">802</a>
+<a href="#803" id="803">803</a>
+<a href="#804" id="804">804</a>
+<a href="#805" id="805">805</a>
+<a href="#806" id="806">806</a>
+<a href="#807" id="807">807</a>
+<a href="#808" id="808">808</a>
+<a href="#809" id="809">809</a>
+<a href="#810" id="810">810</a>
+<a href="#811" id="811">811</a>
+<a href="#812" id="812">812</a>
+<a href="#813" id="813">813</a>
+<a href="#814" id="814">814</a>
+<a href="#815" id="815">815</a>
+<a href="#816" id="816">816</a>
+<a href="#817" id="817">817</a>
+<a href="#818" id="818">818</a>
+<a href="#819" id="819">819</a>
+<a href="#820" id="820">820</a>
+<a href="#821" id="821">821</a>
+<a href="#822" id="822">822</a>
+<a href="#823" id="823">823</a>
+<a href="#824" id="824">824</a>
+<a href="#825" id="825">825</a>
+<a href="#826" id="826">826</a>
+<a href="#827" id="827">827</a>
+<a href="#828" id="828">828</a>
+<a href="#829" id="829">829</a>
+<a href="#830" id="830">830</a>
+<a href="#831" id="831">831</a>
+<a href="#832" id="832">832</a>
+<a href="#833" id="833">833</a>
+<a href="#834" id="834">834</a>
+<a href="#835" id="835">835</a>
+<a href="#836" id="836">836</a>
+<a href="#837" id="837">837</a>
+<a href="#838" id="838">838</a>
+<a href="#839" id="839">839</a>
+<a href="#840" id="840">840</a>
+<a href="#841" id="841">841</a>
+<a href="#842" id="842">842</a>
+<a href="#843" id="843">843</a>
+<a href="#844" id="844">844</a>
+<a href="#845" id="845">845</a>
+<a href="#846" id="846">846</a>
+<a href="#847" id="847">847</a>
+<a href="#848" id="848">848</a>
+<a href="#849" id="849">849</a>
+<a href="#850" id="850">850</a>
+<a href="#851" id="851">851</a>
+<a href="#852" id="852">852</a>
+<a href="#853" id="853">853</a>
+<a href="#854" id="854">854</a>
+<a href="#855" id="855">855</a>
+<a href="#856" id="856">856</a>
+<a href="#857" id="857">857</a>
+<a href="#858" id="858">858</a>
+<a href="#859" id="859">859</a>
+<a href="#860" id="860">860</a>
+<a href="#861" id="861">861</a>
+<a href="#862" id="862">862</a>
+<a href="#863" id="863">863</a>
+<a href="#864" id="864">864</a>
+<a href="#865" id="865">865</a>
+<a href="#866" id="866">866</a>
+<a href="#867" id="867">867</a>
+<a href="#868" id="868">868</a>
+<a href="#869" id="869">869</a>
+<a href="#870" id="870">870</a>
+<a href="#871" id="871">871</a>
+<a href="#872" id="872">872</a>
+<a href="#873" id="873">873</a>
+<a href="#874" id="874">874</a>
+<a href="#875" id="875">875</a>
+<a href="#876" id="876">876</a>
+<a href="#877" id="877">877</a>
+<a href="#878" id="878">878</a>
+<a href="#879" id="879">879</a>
+<a href="#880" id="880">880</a>
+<a href="#881" id="881">881</a>
+<a href="#882" id="882">882</a>
+<a href="#883" id="883">883</a>
+<a href="#884" id="884">884</a>
+<a href="#885" id="885">885</a>
+<a href="#886" id="886">886</a>
+<a href="#887" id="887">887</a>
+<a href="#888" id="888">888</a>
+<a href="#889" id="889">889</a>
+<a href="#890" id="890">890</a>
+<a href="#891" id="891">891</a>
+<a href="#892" id="892">892</a>
+<a href="#893" id="893">893</a>
+<a href="#894" id="894">894</a>
+<a href="#895" id="895">895</a>
+<a href="#896" id="896">896</a>
+<a href="#897" id="897">897</a>
+<a href="#898" id="898">898</a>
+<a href="#899" id="899">899</a>
+<a href="#900" id="900">900</a>
+<a href="#901" id="901">901</a>
+<a href="#902" id="902">902</a>
+<a href="#903" id="903">903</a>
+<a href="#904" id="904">904</a>
+<a href="#905" id="905">905</a>
+<a href="#906" id="906">906</a>
+<a href="#907" id="907">907</a>
+<a href="#908" id="908">908</a>
+<a href="#909" id="909">909</a>
+<a href="#910" id="910">910</a>
+<a href="#911" id="911">911</a>
+<a href="#912" id="912">912</a>
+<a href="#913" id="913">913</a>
+<a href="#914" id="914">914</a>
+<a href="#915" id="915">915</a>
+<a href="#916" id="916">916</a>
+<a href="#917" id="917">917</a>
+<a href="#918" id="918">918</a>
+<a href="#919" id="919">919</a>
+<a href="#920" id="920">920</a>
+<a href="#921" id="921">921</a>
+<a href="#922" id="922">922</a>
+<a href="#923" id="923">923</a>
+<a href="#924" id="924">924</a>
+<a href="#925" id="925">925</a>
+<a href="#926" id="926">926</a>
+<a href="#927" id="927">927</a>
+<a href="#928" id="928">928</a>
+<a href="#929" id="929">929</a>
+<a href="#930" id="930">930</a>
+<a href="#931" id="931">931</a>
+<a href="#932" id="932">932</a>
+<a href="#933" id="933">933</a>
+<a href="#934" id="934">934</a>
+<a href="#935" id="935">935</a>
+<a href="#936" id="936">936</a>
+<a href="#937" id="937">937</a>
+<a href="#938" id="938">938</a>
+<a href="#939" id="939">939</a>
+<a href="#940" id="940">940</a>
+<a href="#941" id="941">941</a>
+<a href="#942" id="942">942</a>
+<a href="#943" id="943">943</a>
+<a href="#944" id="944">944</a>
+<a href="#945" id="945">945</a>
+<a href="#946" id="946">946</a>
+<a href="#947" id="947">947</a>
+<a href="#948" id="948">948</a>
+<a href="#949" id="949">949</a>
+<a href="#950" id="950">950</a>
+<a href="#951" id="951">951</a>
+<a href="#952" id="952">952</a>
+<a href="#953" id="953">953</a>
+<a href="#954" id="954">954</a>
+<a href="#955" id="955">955</a>
+<a href="#956" id="956">956</a>
+<a href="#957" id="957">957</a>
+<a href="#958" id="958">958</a>
+<a href="#959" id="959">959</a>
+<a href="#960" id="960">960</a>
+<a href="#961" id="961">961</a>
+<a href="#962" id="962">962</a>
+<a href="#963" id="963">963</a>
+<a href="#964" id="964">964</a>
+<a href="#965" id="965">965</a>
+<a href="#966" id="966">966</a>
+<a href="#967" id="967">967</a>
+<a href="#968" id="968">968</a>
+<a href="#969" id="969">969</a>
+<a href="#970" id="970">970</a>
+<a href="#971" id="971">971</a>
+<a href="#972" id="972">972</a>
+<a href="#973" id="973">973</a>
+<a href="#974" id="974">974</a>
+<a href="#975" id="975">975</a>
+<a href="#976" id="976">976</a>
+<a href="#977" id="977">977</a>
+<a href="#978" id="978">978</a>
+<a href="#979" id="979">979</a>
+<a href="#980" id="980">980</a>
+<a href="#981" id="981">981</a>
+<a href="#982" id="982">982</a>
+<a href="#983" id="983">983</a>
+<a href="#984" id="984">984</a>
+<a href="#985" id="985">985</a>
+<a href="#986" id="986">986</a>
+<a href="#987" id="987">987</a>
+<a href="#988" id="988">988</a>
+<a href="#989" id="989">989</a>
+<a href="#990" id="990">990</a>
+<a href="#991" id="991">991</a>
+<a href="#992" id="992">992</a>
+<a href="#993" id="993">993</a>
+<a href="#994" id="994">994</a>
+<a href="#995" id="995">995</a>
+<a href="#996" id="996">996</a>
+<a href="#997" id="997">997</a>
+<a href="#998" id="998">998</a>
+<a href="#999" id="999">999</a>
+<a href="#1000" id="1000">1000</a>
+<a href="#1001" id="1001">1001</a>
+<a href="#1002" id="1002">1002</a>
+<a href="#1003" id="1003">1003</a>
+<a href="#1004" id="1004">1004</a>
+<a href="#1005" id="1005">1005</a>
+<a href="#1006" id="1006">1006</a>
+<a href="#1007" id="1007">1007</a>
+<a href="#1008" id="1008">1008</a>
+<a href="#1009" id="1009">1009</a>
+<a href="#1010" id="1010">1010</a>
+<a href="#1011" id="1011">1011</a>
+<a href="#1012" id="1012">1012</a>
+<a href="#1013" id="1013">1013</a>
+<a href="#1014" id="1014">1014</a>
+<a href="#1015" id="1015">1015</a>
+<a href="#1016" id="1016">1016</a>
+<a href="#1017" id="1017">1017</a>
+<a href="#1018" id="1018">1018</a>
+<a href="#1019" id="1019">1019</a>
+<a href="#1020" id="1020">1020</a>
+<a href="#1021" id="1021">1021</a>
+<a href="#1022" id="1022">1022</a>
+<a href="#1023" id="1023">1023</a>
+<a href="#1024" id="1024">1024</a>
+<a href="#1025" id="1025">1025</a>
+<a href="#1026" id="1026">1026</a>
+<a href="#1027" id="1027">1027</a>
+<a href="#1028" id="1028">1028</a>
+<a href="#1029" id="1029">1029</a>
+<a href="#1030" id="1030">1030</a>
+<a href="#1031" id="1031">1031</a>
+<a href="#1032" id="1032">1032</a>
+<a href="#1033" id="1033">1033</a>
+<a href="#1034" id="1034">1034</a>
+<a href="#1035" id="1035">1035</a>
+<a href="#1036" id="1036">1036</a>
+</pre><pre class="rust"><code><span class="kw">use </span>debug_print::{debug_println, debug_eprintln};
+<span class="kw">use </span>ruwren::{Class, VM, send_foreign, get_slot_checked, create_module, ModuleLibrary};
 <span class="kw">use </span>sdl2::{render::Texture, rect::Rect};
+<span class="kw">use </span><span class="kw">crate</span>::gameobject::GameObjectId;
 <span class="kw">use crate</span>::{application::App, gameobject::GameObject};
 <span class="kw">use </span><span class="kw">crate</span>::math::Vec2;
 <span class="kw">use </span>std::{any::Any, collections::HashMap};
 
-<span class="kw">use </span><span class="self">self</span>::transform::get_pos;
-
-<span class="comment">//traits
-</span><span class="kw">pub trait </span>Tickable&lt;T&gt; {
-    <span class="kw">fn </span>tick(<span class="kw-2">&amp;mut </span><span class="self">self</span>, dt: f32, d: <span class="kw-2">&amp;</span>T);
+<span class="doccomment">/// Tick/Update Component 
+</span><span class="kw">pub trait </span>Tickable&lt;T: Component&gt; {
+    <span class="doccomment">///Tick Component with delta time and Component
+    /// # Example
+    /// impliments tickable for Transform that depends on Rigidbody. This snippet will set the transform to the rigidbody position when ticked.
+    /// ```rust, no_run
+    /// impl Tickable&lt;Rigidbody&gt; for Transform {
+    ///     fn tick(&amp;mut self, _: f32, d: &amp;Rigidbody) {
+    ///         self.position = d.position;
+    ///     }
+    /// }
+    /// ```
+    </span><span class="kw">fn </span>tick(<span class="kw-2">&amp;mut </span><span class="self">self</span>, dt: f32, d: <span class="kw-2">&amp;</span>T);
 }
 
-<span class="kw">pub trait </span>Buildable&lt;T&gt; {
-    <span class="kw">fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>, d: <span class="kw-2">&amp;</span>T);
-}
+<span class="comment">// pub trait Buildable&lt;T: Component&gt; {
+//     fn build(&amp;mut self, d: &amp;T);
+// }
 
-<span class="kw">pub trait </span>Initable&lt;T&gt; {
-    <span class="kw">fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>, d: <span class="kw-2">&amp;</span>T);
-}
+// pub trait Initable&lt;T: Component&gt; {
+//     fn init(&amp;mut self, d: &amp;T);
+// }
 
-<span class="kw">pub trait </span>Drawable&lt;T&gt; {
-    <span class="kw">fn </span>draw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, d: <span class="kw-2">&amp;</span>T);
-}
+// pub trait Drawable&lt;T: Component&gt; {
+//     fn draw(&amp;mut self, d: &amp;T);
+// }
 
-<span class="kw">pub trait </span>Component {
+</span><span class="kw">pub trait </span>Component {
     <span class="kw">fn </span>as_any(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw">dyn </span>Any;
     <span class="kw">fn </span>as_any_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>Any;
     <span class="kw">fn </span>send_to_wren(<span class="kw-2">&amp;</span><span class="self">self</span>, slot : usize, vm : <span class="kw-2">&amp;</span>VM);
-
     <span class="kw">fn </span>clone_dyn(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Box&lt;<span class="kw">dyn </span>Component&gt;;
 }
 
-<span class="comment">//component structs
+<span class="doccomment">/// Transform Component for GameObjects
 </span><span class="attr">#[derive(Debug, PartialEq, Default, Copy, Clone)]
 </span><span class="kw">pub struct </span>Transform {
     <span class="kw">pub </span>position: Vec2,
@@ -577,110 +1084,187 @@
     <span class="kw">pub </span>rotation: f64,
 }
 
-<span class="attr">#[derive(PartialEq, Clone)]
+<span class="doccomment">/// Rigidbody Component for GameObjects
+</span><span class="attr">#[derive(PartialEq, Clone)]
 </span><span class="kw">pub struct </span>Rigidbody {
     <span class="kw">pub </span>position: Vec2,
-    <span class="kw">pub </span>bounds: Vec2,
-    <span class="kw">pub </span>vel: Vec2,
-    <span class="kw">pub </span>colliding : <span class="prelude-ty">Option</span>&lt;String&gt;,
-    <span class="kw">pub </span>solid : bool
+    <span class="doccomment">/// Bounds of Collider
+    </span><span class="kw">pub </span>bounds: Vec2,
+    <span class="kw">pub </span>velocity: Vec2,
+    <span class="doccomment">/// GameObjectID of current collider 
+    </span><span class="kw">pub </span>colliding : <span class="prelude-ty">Option</span>&lt;GameObjectId&gt;,
+    <span class="doccomment">/// If set to false colliding is still populated but the rigidbody will not correct its velocity when collisions are detected.
+    </span><span class="kw">pub </span>solid : bool
 }
 
-<span class="attr">#[derive(Clone)]
+<span class="doccomment">/// Sprite Component for GameObjects
+</span><span class="attr">#[derive(Clone)]
 </span><span class="kw">pub struct </span>Sprite {
-    <span class="kw">pub </span>size: (u32, u32),
-    index: (i32, i32),
-    <span class="kw">pub </span>texture_id: String
+    <span class="doccomment">/// size of sprite sheet
+    </span>base_size: (u32, u32),
+    <span class="doccomment">/// Start position on sprite sheet
+    </span>index_cut: (i32, i32),
+    <span class="doccomment">/// size of sprite cell
+    </span>size: (u32, u32),
+    <span class="doccomment">/// Current position on sprite sheet
+    </span>index: (i32, i32),
+    <span class="doccomment">/// Texture file name
+    </span><span class="kw">pub </span>texture_id: String
 }
 
-<span class="attr">#[derive(PartialEq, Default, Clone)]
+<span class="doccomment">/// Animator Component for GameObjects
+</span><span class="attr">#[derive(PartialEq, Default, Clone)]
 </span><span class="kw">pub struct </span>Animator {
-    <span class="kw">pub </span>states: HashMap&lt;String, (i32, i32)&gt;,
-    <span class="kw">pub </span>current_state: String,
-    <span class="kw">pub </span>current_frame: f32,
-    <span class="kw">pub </span>speed: f32,
-    <span class="kw">pub </span>playing: bool
+    <span class="doccomment">/// Name of State(String), sprite sheet index(i32, i32)
+    </span>states: HashMap&lt;String, (i32, i32)&gt;,
+    current_state: String,
+    <span class="kw">pub </span>current_frame: f64,
+    <span class="kw">pub </span>speed: f64,
+    playing: bool
+}
+
+<span class="doccomment">/// Behaviour Component for GameObjects
+</span><span class="attr">#[derive(Clone)]
+</span><span class="kw">pub struct </span>ComponentBehaviour {
+    <span class="doccomment">/// Name of wren class to link to behaviour
+    </span>component: String
 }
 
 <span class="comment">//component impls
 </span><span class="kw">impl </span>Transform {
-    <span class="kw">pub fn </span>new(p: Vec2) -&gt; <span class="self">Self </span>{
+    <span class="kw">pub fn </span>new(pos: Vec2) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
-            position: p,
+            position: pos,
             rotation: <span class="number">0.0</span>,
             scale: Vec2::ONE
         }
     }
 
     <span class="comment">//for wren
-    </span><span class="kw">fn </span>as_component(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+    </span><span class="kw">fn </span>wren_wren_as_component(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
         <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;engine&quot;</span>, <span class="string">&quot;Component&quot;</span>, Box::new(<span class="self">self</span>.clone()) <span class="kw">as </span>Box&lt;<span class="kw">dyn </span>Component&gt; =&gt; <span class="number">0</span>);
     }
 
-    <span class="kw">fn </span>get_pos(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+    <span class="kw">fn </span>wren_get_pos(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
         <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;math&quot;</span>, <span class="string">&quot;Vec2&quot;</span>, <span class="self">self</span>.position =&gt; <span class="number">0</span>);
     }
 
-    <span class="kw">fn </span>get_scale(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+    <span class="kw">fn </span>wren_get_scale(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
         <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;math&quot;</span>, <span class="string">&quot;Vec2&quot;</span>, <span class="self">self</span>.scale =&gt; <span class="number">0</span>);
     }
 
-    <span class="kw">fn </span>get_rotation(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+    <span class="kw">fn </span>wren_get_rotation(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
         vm.set_slot_double(<span class="number">0</span>, <span class="self">self</span>.rotation);
     }
 
-    <span class="kw">fn </span>set_pos(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+    <span class="kw">fn </span>wren_set_pos(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(a) = vm.get_slot_foreign::&lt;Vec2&gt;(<span class="number">1</span>) {
             <span class="self">self</span>.position = a.clone();
         }
     }
 
-    <span class="kw">fn </span>set_scale(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+    <span class="kw">fn </span>wren_set_scale(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(a) = vm.get_slot_foreign::&lt;Vec2&gt;(<span class="number">1</span>) {
             <span class="self">self</span>.position = a.clone();
         }
     }
 
-    <span class="kw">fn </span>set_rotation(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+    <span class="kw">fn </span>wren_set_rotation(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
         <span class="self">self</span>.rotation = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">1</span>);
     }
 
-    <span class="kw">fn </span>set_pos_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+    <span class="kw">fn </span>wren_set_pos_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
             <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; foreign Vec2 =&gt; <span class="number">2</span>);
             comp.get_mut::&lt;Transform&gt;().position = <span class="kw-2">*</span>p;
         }
     }
 
-    <span class="kw">fn </span>update_pos_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+    <span class="kw">fn </span>wren_set_pos_x_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">2</span>);
+            comp.get_mut::&lt;Transform&gt;().position.x = p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_pos_y_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">1</span>);
+            comp.get_mut::&lt;Transform&gt;().position.y = p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_update_pos_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
             <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; foreign Vec2 =&gt; <span class="number">2</span>);
             comp.get_mut::&lt;Transform&gt;().position += <span class="kw-2">*</span>p;
         }
     }
 
-    <span class="kw">fn </span>set_scale_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+    <span class="kw">fn </span>wren_update_pos_x_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">2</span>);
+            comp.get_mut::&lt;Transform&gt;().position.x += p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_update_pos_y_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">2</span>);
+            comp.get_mut::&lt;Transform&gt;().position.y += p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_scale_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
             <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; foreign Vec2 =&gt; <span class="number">2</span>);
             comp.get_mut::&lt;Transform&gt;().scale = <span class="kw-2">*</span>p;
         }
     }
 
-    <span class="kw">fn </span>update_scale_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+    <span class="kw">fn </span>wren_set_scale_x_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">2</span>);
+            comp.get_mut::&lt;Transform&gt;().scale.x = p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_scale_y_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">2</span>);
+            comp.get_mut::&lt;Transform&gt;().scale.y = p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_update_scale_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
             <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; foreign Vec2 =&gt; <span class="number">2</span>);
             comp.get_mut::&lt;Transform&gt;().scale += <span class="kw-2">*</span>p;
         }
     }
 
-    <span class="kw">fn </span>set_rot_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+    <span class="kw">fn </span>wren_update_scale_x_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">2</span>);
+            comp.get_mut::&lt;Transform&gt;().scale.x += p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_update_scale_y_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">2</span>);
+            comp.get_mut::&lt;Transform&gt;().scale.y += p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_rot_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
             <span class="kw">let </span>i = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">2</span>);
             comp.get_mut::&lt;Transform&gt;().rotation = i;
         }
     }
 
-    <span class="kw">fn </span>update_rot_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+    <span class="kw">fn </span>wren_update_rot_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
             <span class="kw">let </span>i = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">2</span>);
             comp.get_mut::&lt;Transform&gt;().rotation += i;
@@ -690,33 +1274,44 @@
 </span>}
 
 <span class="kw">impl </span>Rigidbody {
-    <span class="kw">pub fn </span>new(p: Vec2) -&gt; <span class="self">Self </span>{
+    <span class="kw">pub fn </span>new(pos: Vec2) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             bounds : Vec2::ONE,
-            vel : Vec2::ZERO,
-            position : p,
+            velocity : Vec2::ZERO,
+            position : pos,
+            colliding : <span class="prelude-val">None</span>,
+            solid : <span class="bool-val">true
+        </span>}
+    }
+
+    <span class="kw">pub fn </span>new_without_pos() -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            bounds : Vec2::ONE,
+            velocity : Vec2::ZERO,
+            position : Vec2::ZERO,
             colliding : <span class="prelude-val">None</span>,
             solid : <span class="bool-val">true
         </span>}
     }
 
     <span class="kw">pub fn </span>update_vel_y(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="self">self</span>.position.y += <span class="self">self</span>.vel.y; 
+        <span class="self">self</span>.position.y += <span class="self">self</span>.velocity.y; 
     }
 
     <span class="kw">pub fn </span>update_vel_x(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="self">self</span>.position.x += <span class="self">self</span>.vel.x; 
+        <span class="self">self</span>.position.x += <span class="self">self</span>.velocity.x; 
     }
 
     <span class="kw">pub fn </span>update_correct_y(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="self">self</span>.position.y -= <span class="self">self</span>.vel.y; 
+        <span class="self">self</span>.position.y -= <span class="self">self</span>.velocity.y; 
     }
 
     <span class="kw">pub fn </span>update_correct_x(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="self">self</span>.position.x -= <span class="self">self</span>.vel.x; 
+        <span class="self">self</span>.position.x -= <span class="self">self</span>.velocity.x; 
     }
 
-    <span class="kw">pub fn </span>check_collision(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>Rigidbody) -&gt; bool {
+    <span class="doccomment">/// Simple AABB collision
+    </span><span class="kw">pub fn </span>check_collision(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>Rigidbody) -&gt; bool {
         <span class="comment">//The sides of the rectangles
         </span><span class="kw">let </span>left_a = <span class="self">self</span>.position.x;
         <span class="kw">let </span>left_b = other.position.x;
@@ -737,6 +1332,131 @@
 
         <span class="bool-val">false
     </span>}
+
+    <span class="comment">//for wren
+    </span><span class="kw">fn </span>wren_as_component(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;engine&quot;</span>, <span class="string">&quot;Component&quot;</span>, Box::new(<span class="self">self</span>.clone()) <span class="kw">as </span>Box&lt;<span class="kw">dyn </span>Component&gt; =&gt; <span class="number">0</span>);
+    }
+
+    <span class="kw">fn </span>wren_vel_getter(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;math&quot;</span>, <span class="string">&quot;Vec2&quot;</span>, <span class="self">self</span>.velocity =&gt; <span class="number">0</span>);
+    }
+
+    <span class="kw">fn </span>wren_vel_setter(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; foreign Vec2 =&gt; <span class="number">1</span>);
+        <span class="self">self</span>.velocity = <span class="kw-2">*</span>p;
+    }
+
+    <span class="kw">fn </span>wren_solid_getter(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        vm.set_slot_bool(<span class="number">0</span>, <span class="self">self</span>.solid);
+    }
+
+    <span class="kw">fn </span>wren_solid_setter(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">let </span>s = <span class="macro">get_slot_checked!</span>(vm =&gt; bool <span class="number">1</span>);
+        <span class="self">self</span>.solid = s;
+    }
+
+    <span class="kw">fn </span>wren_colliding_getter(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(coll) = <span class="self">self</span>.colliding.clone() {
+            vm.set_slot_new_map(<span class="number">0</span>);
+            vm.set_slot_string(<span class="number">1</span>, <span class="string">&quot;id&quot;</span>);
+            vm.set_slot_string(<span class="number">2</span>, coll.name.clone());
+            vm.set_map_value(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>);
+            vm.set_slot_string(<span class="number">1</span>, <span class="string">&quot;uuid&quot;</span>);
+            vm.set_slot_string(<span class="number">2</span>, coll.uuid.clone());
+            vm.set_map_value(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>);
+        }
+        <span class="kw">else </span>{
+            vm.set_slot_null(<span class="number">0</span>)
+        }
+    }
+
+    <span class="kw">fn </span>wren_colliding_from_gameobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(coll) = comp.get::&lt;Rigidbody&gt;().colliding.clone() {
+                vm.set_slot_new_map(<span class="number">0</span>);
+                vm.set_slot_string(<span class="number">2</span>, <span class="string">&quot;id&quot;</span>);
+                vm.set_slot_string(<span class="number">3</span>, coll.name.clone());
+                vm.set_map_value(<span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>);
+                vm.set_slot_string(<span class="number">2</span>, <span class="string">&quot;uuid&quot;</span>);
+                vm.set_slot_string(<span class="number">3</span>, coll.uuid.clone());
+                vm.set_map_value(<span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>);
+            }
+            <span class="kw">else </span>{
+                vm.set_slot_null(<span class="number">0</span>)
+            }
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_vel_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; foreign Vec2 =&gt; <span class="number">2</span>);
+            comp.get_mut::&lt;Rigidbody&gt;().velocity = <span class="kw-2">*</span>p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_pos_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; foreign Vec2 =&gt; <span class="number">2</span>);
+            comp.get_mut::&lt;Rigidbody&gt;().position = <span class="kw-2">*</span>p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_pos_x_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">2</span>);
+            comp.get_mut::&lt;Rigidbody&gt;().position.x = p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_pos_y_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">2</span>);
+            comp.get_mut::&lt;Rigidbody&gt;().position.y = p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_vel_x_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">2</span>);
+            comp.get_mut::&lt;Rigidbody&gt;().velocity.x = p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_vel_y_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">2</span>);
+            comp.get_mut::&lt;Rigidbody&gt;().velocity.y = p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_solid_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>s = <span class="macro">get_slot_checked!</span>(vm =&gt; bool <span class="number">2</span>);
+            comp.get_mut::&lt;Rigidbody&gt;().solid = s;
+        }
+    }
+
+    <span class="kw">fn </span>wren_update_vel_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; foreign Vec2 =&gt; <span class="number">2</span>);
+            comp.get_mut::&lt;Rigidbody&gt;().velocity += <span class="kw-2">*</span>p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_update_vel_x_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">2</span>);
+            comp.get_mut::&lt;Rigidbody&gt;().velocity.x += p;
+        }
+    }
+
+    <span class="kw">fn </span>wren_update_vel_y_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; num <span class="number">2</span>);
+            comp.get_mut::&lt;Rigidbody&gt;().velocity.y += p;
+        }
+    }
 }
 
 <span class="kw">impl </span>Animator {
@@ -755,12 +1475,12 @@
         <span class="self">self
     </span>}
 
-    <span class="kw">pub fn </span>at_speed(<span class="kw-2">mut </span><span class="self">self</span>, s: f32) -&gt; Animator {
+    <span class="kw">pub fn </span>at_speed(<span class="kw-2">mut </span><span class="self">self</span>, s: f64) -&gt; Animator {
         <span class="self">self</span>.speed = s;
         <span class="self">self
     </span>}
 
-    <span class="kw">pub fn </span>at_frame(<span class="kw-2">mut </span><span class="self">self</span>, s: f32) -&gt; Animator {
+    <span class="kw">pub fn </span>at_frame(<span class="kw-2">mut </span><span class="self">self</span>, s: f64) -&gt; Animator {
         <span class="self">self</span>.current_frame = s;
         <span class="self">self
     </span>}
@@ -794,15 +1514,23 @@
         }
     }
 
+    <span class="kw">pub fn </span>get_state(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>String {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.current_state
+    }
+
+    <span class="kw">pub fn </span>insert_state(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str, i: i32, j: i32) {
+        <span class="self">self</span>.states.insert(key.to_string(), (i, j));
+    }
+
     <span class="kw">pub fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, dt: f32) {
         <span class="kw">if </span><span class="self">self</span>.playing &amp;&amp; <span class="self">self</span>.current_state != String::from(<span class="string">&quot;None&quot;</span>) {
-            <span class="kw">if </span><span class="self">self</span>.current_frame &gt; <span class="self">self</span>.states.get(<span class="kw-2">&amp;</span><span class="self">self</span>.current_state).unwrap().<span class="number">0 </span><span class="kw">as </span>f32 {
+            <span class="kw">if </span><span class="self">self</span>.current_frame &gt; <span class="self">self</span>.states.get(<span class="kw-2">&amp;</span><span class="self">self</span>.current_state).unwrap().<span class="number">0 </span><span class="kw">as </span>f64 {
                 <span class="self">self</span>.current_frame = <span class="number">0.0</span>;
             }
 
-            <span class="self">self</span>.current_frame += dt<span class="kw-2">*</span><span class="self">self</span>.speed;
+            <span class="self">self</span>.current_frame += dt <span class="kw">as </span>f64<span class="kw-2">*</span><span class="self">self</span>.speed;
 
-            <span class="kw">if </span><span class="self">self</span>.current_frame &gt; <span class="self">self</span>.states.get(<span class="kw-2">&amp;</span><span class="self">self</span>.current_state).unwrap().<span class="number">0 </span><span class="kw">as </span>f32 {
+            <span class="kw">if </span><span class="self">self</span>.current_frame &gt; <span class="self">self</span>.states.get(<span class="kw-2">&amp;</span><span class="self">self</span>.current_state).unwrap().<span class="number">0 </span><span class="kw">as </span>f64 {
                 <span class="self">self</span>.current_frame = <span class="number">0.0</span>;
             }
         }
@@ -816,38 +1544,167 @@
             </span>);
         }
     }
+
+    <span class="comment">//for wren
+    </span><span class="kw">fn </span>wren_wren_as_component(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;engine&quot;</span>, <span class="string">&quot;Component&quot;</span>, Box::new(<span class="self">self</span>.clone()) <span class="kw">as </span>Box&lt;<span class="kw">dyn </span>Component&gt; =&gt; <span class="number">0</span>);
+    }
+
+    <span class="kw">fn </span>wren_playing_getter(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        vm.set_slot_bool(<span class="number">0</span>, <span class="self">self</span>.playing);   
+    }
+
+    <span class="kw">fn </span>wren_frame_getter(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        vm.set_slot_double(<span class="number">0</span>, <span class="self">self</span>.current_frame <span class="kw">as </span>f64);   
+    }
+
+    <span class="kw">fn </span>wren_speed_getter(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        vm.set_slot_double(<span class="number">0</span>, <span class="self">self</span>.speed);   
+    }
+
+    <span class="kw">fn </span>wren_play(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="self">self</span>.play();  
+    }
+
+    <span class="kw">fn </span>wren_stop(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="self">self</span>.stop();  
+    }
+
+    <span class="kw">fn </span>wren_get_state(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(state) = vm.get_slot_string(<span class="number">1</span>) {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = <span class="self">self</span>.states.get(<span class="kw-2">&amp;</span>state) {
+                vm.set_slot_new_map(<span class="number">0</span>);
+                vm.set_slot_string(<span class="number">1</span>, state);
+                <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;math&quot;</span>, <span class="string">&quot;Vec2&quot;</span>, Vec2::new(s.<span class="number">0 </span><span class="kw">as </span>f64, s.<span class="number">1 </span><span class="kw">as </span>f64) =&gt; <span class="number">2</span>);
+                vm.set_map_value(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>);
+            }
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_state(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(state) = vm.get_slot_string(<span class="number">1</span>) {
+            <span class="self">self</span>.set_state(<span class="kw-2">&amp;</span>state);
+        }
+    }
+
+    <span class="kw">fn </span>wren_insert_state(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(state) = vm.get_slot_string(<span class="number">1</span>) {
+            <span class="kw">let </span>loc = <span class="macro">get_slot_checked!</span>(vm =&gt; foreign Vec2 =&gt; <span class="number">2</span>);
+            <span class="self">self</span>.states.insert(state, (loc.x <span class="kw">as </span>i32, loc.y <span class="kw">as </span>i32));
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_speed(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(speed) = vm.get_slot_double(<span class="number">1</span>) {
+            <span class="self">self</span>.speed = speed;
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_frame(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(frame) = vm.get_slot_double(<span class="number">1</span>) {
+            <span class="self">self</span>.current_frame = frame;
+        }
+    }
+
+    <span class="kw">fn </span>wren_play_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            comp.get_mut::&lt;Animator&gt;().play();
+        }
+    }
+
+    <span class="kw">fn </span>wren_stop_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            comp.get_mut::&lt;Animator&gt;().stop();
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_state_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(state) = vm.get_slot_string(<span class="number">2</span>) {
+                comp.get_mut::&lt;Animator&gt;().set_state(<span class="kw-2">&amp;</span>state);
+            }
+        }
+    }
+
+    <span class="kw">fn </span>wren_get_state_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(state) = vm.get_slot_string(<span class="number">1</span>) {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = comp.get::&lt;Animator&gt;().states.get(<span class="kw-2">&amp;</span>state) {
+                    vm.set_slot_new_map(<span class="number">0</span>);
+                    vm.set_slot_string(<span class="number">1</span>, state);
+                    <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;math&quot;</span>, <span class="string">&quot;Vec2&quot;</span>, Vec2::new(s.<span class="number">0 </span><span class="kw">as </span>f64, s.<span class="number">1 </span><span class="kw">as </span>f64) =&gt; <span class="number">2</span>);
+                    vm.set_map_value(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>);
+                }
+            }
+        }
+    }
+
+    <span class="kw">fn </span>wren_insert_state_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(state) = vm.get_slot_string(<span class="number">2</span>) {
+                <span class="kw">let </span>loc = <span class="macro">get_slot_checked!</span>(vm =&gt; foreign Vec2 =&gt; <span class="number">3</span>);
+                comp.get_mut::&lt;Animator&gt;().states.insert(state, (loc.x <span class="kw">as </span>i32, loc.y <span class="kw">as </span>i32));
+            }
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_speed_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(speed) = vm.get_slot_double(<span class="number">2</span>) {
+                comp.get_mut::&lt;Animator&gt;().speed = speed;
+            }
+        }
+    }
+
+    <span class="kw">fn </span>wren_set_frame_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(frame) = vm.get_slot_double(<span class="number">2</span>) {
+                comp.get_mut::&lt;Animator&gt;().current_frame = frame;
+            }
+        }
+    }
 }
 
 <span class="kw">impl </span>Sprite {
     <span class="kw">pub fn </span>new(t_id: <span class="kw-2">&amp;</span>str) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
-            size: (<span class="number">0</span>,<span class="number">0</span>),
+            size: (<span class="number">1</span>, <span class="number">1</span>),
+            base_size: (<span class="number">1</span>, <span class="number">1</span>),
+            index_cut: (<span class="number">0</span>, <span class="number">0</span>),
             index: (<span class="number">0</span>,<span class="number">0</span>),
             texture_id: t_id.to_string()
         }
     }
 
     <span class="kw">pub fn </span>load(<span class="kw-2">&amp;mut </span><span class="self">self</span>, textures: <span class="kw-2">&amp;</span>HashMap&lt;String, Texture&gt;) {
-        <span class="self">self</span>.size = (
-            textures[<span class="kw-2">&amp;</span><span class="self">self</span>.texture_id].query().width,
-            textures[<span class="kw-2">&amp;</span><span class="self">self</span>.texture_id].query().height,
-        );
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = textures.get(<span class="kw-2">&amp;</span><span class="self">self</span>.texture_id) {
+            <span class="self">self</span>.base_size = (
+                t.query().width,
+                t.query().height,
+            );
+        }
+        <span class="kw">else </span>{
+            <span class="macro">debug_eprintln!</span>(<span class="string">&quot;Sprite Error: Unable to Get Texture Id {}&quot;</span>, <span class="self">self</span>.texture_id);
+        }
+
+        <span class="self">self</span>.anim_sprite_sheet(<span class="self">self</span>.index_cut.<span class="number">0</span>, <span class="self">self</span>.index_cut.<span class="number">1</span>);
+    }
+
+    <span class="kw">pub fn </span>get_size(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (u32, u32) {
+        (
+            <span class="self">self</span>.base_size.<span class="number">0</span>/<span class="self">self</span>.size.<span class="number">0</span>,
+            <span class="self">self</span>.base_size.<span class="number">1</span>/<span class="self">self</span>.size.<span class="number">1</span>,
+        )
     }
 
     <span class="kw">pub fn </span>cut_sprite_sheet(<span class="kw-2">&amp;mut </span><span class="self">self</span>, ind: i32, ind2: i32, col: u32, row: u32) {
-        <span class="kw">let </span>w = <span class="self">self</span>.size.<span class="number">0</span>;
-        <span class="kw">let </span>h = <span class="self">self</span>.size.<span class="number">1</span>;
-
-        <span class="self">self</span>.size = (
-            w/col,
-            h/row
-        );
-
-        <span class="self">self</span>.index = (ind<span class="kw-2">*</span>w <span class="kw">as </span>i32, ind2<span class="kw-2">*</span>h <span class="kw">as </span>i32);
+        <span class="self">self</span>.size = (col,row);
+        <span class="self">self</span>.index_cut = (ind, ind2);
+        <span class="self">self</span>.index = (<span class="number">0</span>, <span class="number">0</span>);
     }
 
     <span class="kw">pub fn </span>anim_sprite_sheet(<span class="kw-2">&amp;mut </span><span class="self">self</span>, ind: i32, ind2: i32) {
-        <span class="self">self</span>.index = (ind<span class="kw-2">*</span><span class="self">self</span>.size.<span class="number">0 </span><span class="kw">as </span>i32, ind2<span class="kw-2">*</span><span class="self">self</span>.size.<span class="number">1 </span><span class="kw">as </span>i32);
+        <span class="self">self</span>.index = (ind<span class="kw-2">*</span><span class="self">self</span>.get_size().<span class="number">0 </span><span class="kw">as </span>i32, ind2<span class="kw-2">*</span><span class="self">self</span>.get_size().<span class="number">1 </span><span class="kw">as </span>i32);
     }
 
     <span class="kw">pub fn </span>draw(<span class="kw-2">&amp;</span><span class="self">self</span>, app: <span class="kw-2">&amp;mut </span>App, textures: <span class="kw-2">&amp;</span>HashMap&lt;String, Texture&gt;, t: <span class="kw-2">&amp;</span>Transform) {
@@ -856,13 +1713,13 @@
             Rect::new(
                 <span class="self">self</span>.index.<span class="number">0</span>,
                 <span class="self">self</span>.index.<span class="number">1</span>,
-                <span class="self">self</span>.size.<span class="number">0</span>,
-                <span class="self">self</span>.size.<span class="number">1 </span>,
+                <span class="self">self</span>.get_size().<span class="number">0</span>,
+                <span class="self">self</span>.get_size().<span class="number">1 </span>,
             ), 
             Rect::new(
                 t.position.x <span class="kw">as </span>i32, t.position.y <span class="kw">as </span>i32, 
-                <span class="self">self</span>.size.<span class="number">0</span><span class="kw-2">*</span>t.scale.x.abs() <span class="kw">as </span>u32, 
-                <span class="self">self</span>.size.<span class="number">1</span><span class="kw-2">*</span>t.scale.y.abs() <span class="kw">as </span>u32),
+                <span class="self">self</span>.get_size().<span class="number">0</span><span class="kw-2">*</span>t.scale.x.abs() <span class="kw">as </span>u32, 
+                <span class="self">self</span>.get_size().<span class="number">1</span><span class="kw-2">*</span>t.scale.y.abs() <span class="kw">as </span>u32),
             t.rotation,
             <span class="prelude-val">None</span>,
             t.scale.x &lt; <span class="number">0.0</span>,
@@ -871,25 +1728,65 @@
     }
 
     <span class="comment">//for wren
-    </span><span class="kw">fn </span>as_component(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+    </span><span class="kw">fn </span>wren_wren_as_component(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
         <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;engine&quot;</span>, <span class="string">&quot;Component&quot;</span>, Box::new(<span class="self">self</span>.clone()) <span class="kw">as </span>Box&lt;<span class="kw">dyn </span>Component&gt; =&gt; <span class="number">0</span>);
     }
 
     <span class="kw">fn </span>wren_get_size(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
-        <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;math&quot;</span>, <span class="string">&quot;Vec2&quot;</span>, Vec2::new(<span class="self">self</span>.size.<span class="number">0 </span><span class="kw">as </span>f64, <span class="self">self</span>.size.<span class="number">1 </span><span class="kw">as </span>f64) =&gt; <span class="number">0</span>);
+        <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;math&quot;</span>, <span class="string">&quot;Vec2&quot;</span>, Vec2::new(<span class="self">self</span>.get_size().<span class="number">0 </span><span class="kw">as </span>f64, <span class="self">self</span>.get_size().<span class="number">1 </span><span class="kw">as </span>f64) =&gt; <span class="number">0</span>);
     }
 
-    <span class="kw">fn </span>set_size_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
+    <span class="kw">fn </span>wren_get_index(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;math&quot;</span>, <span class="string">&quot;Vec2&quot;</span>, Vec2::new(<span class="self">self</span>.index.<span class="number">0 </span><span class="kw">as </span>f64, <span class="self">self</span>.index.<span class="number">1 </span><span class="kw">as </span>f64) =&gt; <span class="number">0</span>);
+    }
+
+    <span class="kw">fn </span>wren_cut_sprite_sheet(<span class="kw-2">&amp;mut </span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">let </span>xy = <span class="macro">get_slot_checked!</span>(vm =&gt; foreign Vec2 =&gt; <span class="number">1</span>);
+        <span class="kw">let </span>colrow = <span class="macro">get_slot_checked!</span>(vm =&gt; foreign Vec2 =&gt; <span class="number">2</span>);
+        <span class="self">self</span>.cut_sprite_sheet(xy.x <span class="kw">as </span>i32, xy.y <span class="kw">as </span>i32, colrow.x <span class="kw">as </span>u32, colrow.y <span class="kw">as </span>u32);
+    }
+
+
+    <span class="kw">fn </span>wren_get_texture_id(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        vm.set_slot_string(<span class="number">0</span>, <span class="self">self</span>.texture_id.clone());
+    }
+
+    <span class="kw">fn </span>wren_set_size_from_gamobject(vm: <span class="kw-2">&amp;</span>VM) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
             <span class="kw">let </span>p = <span class="macro">get_slot_checked!</span>(vm =&gt; foreign Vec2 =&gt; <span class="number">2</span>);
-            comp.get_mut::&lt;Sprite&gt;().size = (p.x <span class="kw">as </span>u32, p.y <span class="kw">as </span>u32);
+            comp.get_mut::&lt;Sprite&gt;().base_size = (p.x <span class="kw">as </span>u32, p.y <span class="kw">as </span>u32);
         }
+    }
+
+    <span class="kw">fn </span>wren_cut_sprite_sheet_from_gameobject(vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(comp) = vm.get_slot_foreign_mut::&lt;GameObject&gt;(<span class="number">1</span>) {
+            <span class="kw">let </span>xy = <span class="macro">get_slot_checked!</span>(vm =&gt; foreign Vec2 =&gt; <span class="number">2</span>);
+            <span class="kw">let </span>colrow = <span class="macro">get_slot_checked!</span>(vm =&gt; foreign Vec2 =&gt; <span class="number">3</span>);
+            comp.get_mut::&lt;Sprite&gt;().cut_sprite_sheet(xy.x <span class="kw">as </span>i32, xy.y <span class="kw">as </span>i32, colrow.x <span class="kw">as </span>u32, colrow.y <span class="kw">as </span>u32);
+        }
+    }
+}
+
+<span class="kw">impl </span>ComponentBehaviour {
+    <span class="kw">pub fn </span>new(s : String) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            component: s.clone()
+        }
+    }
+
+    <span class="kw">pub fn </span>get_component(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>String {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.component
+    }
+
+    <span class="comment">//for wren
+    </span><span class="kw">fn </span>wren_as_component(<span class="kw-2">&amp;</span><span class="self">self</span>, vm: <span class="kw-2">&amp;</span>VM) {
+        <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;engine&quot;</span>, <span class="string">&quot;Component&quot;</span>, Box::new(<span class="self">self</span>.clone()) <span class="kw">as </span>Box&lt;<span class="kw">dyn </span>Component&gt; =&gt; <span class="number">0</span>);
     }
 }
 
 <span class="kw">impl </span>PartialEq <span class="kw">for </span>Sprite {
     <span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool {
-        <span class="self">self</span>.size == other.size &amp;&amp; <span class="self">self</span>.index == other.index
+        <span class="self">self</span>.get_size() == other.get_size() &amp;&amp; <span class="self">self</span>.index == other.index
     }
 }
 
@@ -898,7 +1795,9 @@
         <span class="self">Self </span>{
             size: (u32::default(), u32::default()),
             index: (i32::default(), i32::default()),
-            texture_id: <span class="string">&quot;&quot;</span>.to_string()
+            texture_id: <span class="string">&quot;&quot;</span>.to_string(),
+            base_size: (u32::default(), u32::default()),
+            index_cut: (i32::default(), i32::default())
         }
     }
 }
@@ -907,7 +1806,7 @@
     <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             bounds : Vec2::ONE,
-            vel : Vec2::ZERO,
+            velocity : Vec2::ZERO,
             position : Vec2::ONE,
             colliding : <span class="prelude-val">None</span>,
             solid : <span class="bool-val">true    
@@ -960,7 +1859,7 @@
     </span>}
 
     <span class="kw">fn </span>send_to_wren(<span class="kw-2">&amp;</span><span class="self">self</span>, slot : usize, vm : <span class="kw-2">&amp;</span>VM) {
-        <span class="macro">todo!</span>()
+        <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;engine&quot;</span>, <span class="string">&quot;Rigidbody&quot;</span>, <span class="self">self</span>.clone() =&gt; slot);
     }
 
     <span class="kw">fn </span>clone_dyn(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Box&lt;<span class="kw">dyn </span>Component&gt; {
@@ -978,7 +1877,25 @@
     </span>}
 
     <span class="kw">fn </span>send_to_wren(<span class="kw-2">&amp;</span><span class="self">self</span>, slot : usize, vm : <span class="kw-2">&amp;</span>VM) {
-        <span class="macro">todo!</span>()
+        <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;engine&quot;</span>, <span class="string">&quot;Animator&quot;</span>, <span class="self">self</span>.clone() =&gt; slot);
+    }
+
+    <span class="kw">fn </span>clone_dyn(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Box&lt;<span class="kw">dyn </span>Component&gt; {
+        Box::new(<span class="self">self</span>.clone())
+    }
+}
+
+<span class="kw">impl </span>Component <span class="kw">for </span>ComponentBehaviour {
+    <span class="kw">fn </span>as_any(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw">dyn </span>Any {
+        <span class="self">self
+    </span>}
+
+    <span class="kw">fn </span>as_any_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>Any {
+        <span class="self">self
+    </span>}
+
+    <span class="kw">fn </span>send_to_wren(<span class="kw-2">&amp;</span><span class="self">self</span>, slot : usize, vm : <span class="kw-2">&amp;</span>VM) {
+        <span class="macro">send_foreign!</span>(vm, <span class="string">&quot;engine&quot;</span>, <span class="string">&quot;ComponentBehaviour&quot;</span>, <span class="self">self</span>.clone() =&gt; slot);
     }
 
     <span class="kw">fn </span>clone_dyn(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Box&lt;<span class="kw">dyn </span>Component&gt; {
@@ -988,7 +1905,7 @@
 
 <span class="kw">impl </span>Tickable&lt;Sprite&gt; <span class="kw">for </span>Rigidbody {
     <span class="kw">fn </span>tick(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: f32, d: <span class="kw-2">&amp;</span>Sprite) {
-        <span class="kw">let </span>sprite_size = d.size;
+        <span class="kw">let </span>sprite_size = d.get_size();
         <span class="self">self</span>.bounds = Vec2::new(sprite_size.<span class="number">0 </span><span class="kw">as </span>f64, sprite_size.<span class="number">1 </span><span class="kw">as </span>f64);
     }
 }
@@ -1032,30 +1949,60 @@
     }
 }
 
+<span class="kw">impl </span>Class <span class="kw">for </span>Rigidbody {
+    <span class="kw">fn </span>initialize(vm: <span class="kw-2">&amp;</span>VM) -&gt; Rigidbody {
+        Rigidbody::new_without_pos()
+    }
+}
+
+<span class="kw">impl </span>Class <span class="kw">for </span>ComponentBehaviour {
+    <span class="kw">fn </span>initialize(vm: <span class="kw-2">&amp;</span>VM) -&gt; ComponentBehaviour {
+        <span class="kw">let </span>b = <span class="macro">get_slot_checked!</span>(vm =&gt; string <span class="number">1</span>);
+        ComponentBehaviour::new(b)
+    }
+}
+
+<span class="kw">impl </span>Class <span class="kw">for </span>Animator {
+    <span class="kw">fn </span>initialize(<span class="kw">_</span>: <span class="kw-2">&amp;</span>VM) -&gt; Animator {
+        Animator::new()
+    }
+}
+
 <span class="macro">create_module! </span>(
     class(<span class="string">&quot;Transform&quot;</span>) <span class="kw">crate</span>::components::Transform =&gt; transform {
-        instance(getter <span class="string">&quot;as_component&quot;</span>) as_component,
-        instance(getter <span class="string">&quot;position&quot;</span>) get_pos,
-        instance(getter <span class="string">&quot;scale&quot;</span>) get_scale,
-        instance(getter <span class="string">&quot;rotation&quot;</span>) get_rotation,
-        instance(setter <span class="string">&quot;position&quot;</span>) set_pos,
-        instance(setter <span class="string">&quot;scale&quot;</span>) set_scale,
-        instance(setter <span class="string">&quot;rotation&quot;</span>) set_rotation,
+        instance(getter <span class="string">&quot;as_component&quot;</span>) wren_wren_as_component,
+        instance(getter <span class="string">&quot;position&quot;</span>) wren_get_pos,
+        instance(getter <span class="string">&quot;scale&quot;</span>) wren_get_scale,
+        instance(getter <span class="string">&quot;rotation&quot;</span>) wren_get_rotation,
+        instance(setter <span class="string">&quot;position&quot;</span>) wren_set_pos,
+        instance(setter <span class="string">&quot;scale&quot;</span>) wren_set_scale,
+        instance(setter <span class="string">&quot;rotation&quot;</span>) wren_set_rotation,
 
-        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_pos&quot;</span>, <span class="number">2</span>) set_pos_from_gamobject,
-        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;update_pos&quot;</span>, <span class="number">2</span>) update_pos_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_position&quot;</span>, <span class="number">2</span>) wren_set_pos_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_position_x&quot;</span>, <span class="number">2</span>) wren_set_pos_x_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_position_y&quot;</span>, <span class="number">2</span>) wren_set_pos_y_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;update_position&quot;</span>, <span class="number">2</span>) wren_update_pos_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;update_position_x&quot;</span>, <span class="number">2</span>) wren_update_pos_x_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;update_position_y&quot;</span>, <span class="number">2</span>) wren_update_pos_y_from_gamobject,
 
-        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_scale&quot;</span>, <span class="number">2</span>) set_scale_from_gamobject,
-        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;update_scale&quot;</span>, <span class="number">2</span>) update_scale_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_scale&quot;</span>, <span class="number">2</span>) wren_set_scale_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_scale_x&quot;</span>, <span class="number">2</span>) wren_set_scale_x_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_scale_y&quot;</span>, <span class="number">2</span>) wren_set_scale_y_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;update_scale&quot;</span>, <span class="number">2</span>) wren_update_scale_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;update_scale_x&quot;</span>, <span class="number">2</span>) wren_update_scale_x_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;update_scale_y&quot;</span>, <span class="number">2</span>) wren_update_scale_y_from_gamobject,
 
-        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_rot&quot;</span>, <span class="number">2</span>) set_rot_from_gamobject,
-        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;update_rot&quot;</span>, <span class="number">2</span>) update_rot_from_gamobject
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_rotation&quot;</span>, <span class="number">2</span>) wren_set_rot_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;update_rotation&quot;</span>, <span class="number">2</span>) wren_update_rot_from_gamobject
     }
 
     class(<span class="string">&quot;Sprite&quot;</span>) <span class="kw">crate</span>::components::Sprite =&gt; sprite {
-        instance(getter <span class="string">&quot;as_component&quot;</span>) as_component,
+        instance(getter <span class="string">&quot;as_component&quot;</span>) wren_wren_as_component,
         instance(getter <span class="string">&quot;size&quot;</span>) wren_get_size,
-        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_size&quot;</span>, <span class="number">2</span>) set_size_from_gamobject
+        instance(getter <span class="string">&quot;texture_id&quot;</span>) wren_get_texture_id,
+        instance(getter <span class="string">&quot;current_index&quot;</span>) wren_get_index,
+        instance(<span class="kw">fn </span><span class="string">&quot;cut_sprite_sheet&quot;</span>, <span class="number">2</span>) wren_cut_sprite_sheet,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;cut_sprite_sheet&quot;</span>, <span class="number">3</span>) wren_cut_sprite_sheet_from_gameobject
     }
 
     class(<span class="string">&quot;Component&quot;</span>) Box&lt;<span class="kw">dyn </span><span class="kw">crate</span>::components::Component&gt; =&gt; component {
@@ -1065,9 +2012,58 @@
         instance(<span class="kw">fn </span><span class="string">&quot;get_component&quot;</span>, <span class="number">1</span>) wren_get_component,
         instance(<span class="kw">fn </span><span class="string">&quot;add_component&quot;</span>, <span class="number">1</span>) wren_add_component,
         instance(<span class="kw">fn </span><span class="string">&quot;set_component&quot;</span>, <span class="number">2</span>) wren_set_component,
-        instance(getter <span class="string">&quot;id&quot;</span>) wren_getter_id
-     }
-    
+        instance(getter <span class="string">&quot;id&quot;</span>) wren_getter_id,
+        instance(getter <span class="string">&quot;name&quot;</span>) wren_getter_name,
+        instance(setter <span class="string">&quot;name&quot;</span>) wren_setter_name,
+        instance(getter <span class="string">&quot;uuid&quot;</span>) wren_getter_uuid
+    }
+
+    class(<span class="string">&quot;Rigidbody&quot;</span>) <span class="kw">crate</span>::components::Rigidbody =&gt; rigidbody {
+        instance(getter <span class="string">&quot;as_component&quot;</span>) wren_as_component,
+        instance(getter <span class="string">&quot;velocity&quot;</span>) wren_vel_getter,
+        instance(setter <span class="string">&quot;velocity&quot;</span>) wren_vel_setter,
+        instance(getter <span class="string">&quot;solid&quot;</span>) wren_solid_getter,
+        instance(setter <span class="string">&quot;solid&quot;</span>) wren_solid_setter,
+        instance(getter <span class="string">&quot;colliding&quot;</span>) wren_colliding_getter,
+        
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;colliding&quot;</span>, <span class="number">1</span>) wren_colliding_from_gameobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_velocity&quot;</span>, <span class="number">2</span>) wren_set_vel_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_velocity_x&quot;</span>, <span class="number">2</span>) wren_set_vel_x_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_velocity_y&quot;</span>, <span class="number">2</span>) wren_set_vel_y_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_position&quot;</span>, <span class="number">2</span>) wren_set_pos_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_position_x&quot;</span>, <span class="number">2</span>) wren_set_pos_x_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_position_y&quot;</span>, <span class="number">2</span>) wren_set_pos_y_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;update_velocity&quot;</span>, <span class="number">2</span>) wren_update_vel_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;update_velocity_x&quot;</span>, <span class="number">2</span>) wren_update_vel_x_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;update_velocity_y&quot;</span>, <span class="number">2</span>) wren_update_vel_y_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_solid&quot;</span>, <span class="number">2</span>) wren_set_solid_from_gamobject
+    }
+
+    class(<span class="string">&quot;Animator&quot;</span>) <span class="kw">crate</span>::components::Animator =&gt; animator {
+        instance(getter <span class="string">&quot;as_component&quot;</span>) wren_wren_as_component,
+        instance(getter <span class="string">&quot;playing&quot;</span>) wren_playing_getter,
+        instance(getter <span class="string">&quot;frame&quot;</span>) wren_frame_getter,
+        instance(getter <span class="string">&quot;speed&quot;</span>) wren_speed_getter,
+        instance(setter <span class="string">&quot;speed&quot;</span>) wren_set_speed,
+        instance(setter <span class="string">&quot;frame&quot;</span>) wren_set_frame,
+        instance(<span class="kw">fn </span><span class="string">&quot;get_state&quot;</span>, <span class="number">1</span>) wren_get_state,
+        instance(<span class="kw">fn </span><span class="string">&quot;set_state&quot;</span>, <span class="number">1</span>) wren_set_state,
+        instance(<span class="kw">fn </span><span class="string">&quot;play&quot;</span>, <span class="number">0</span>) wren_play,
+        instance(<span class="kw">fn </span><span class="string">&quot;stop&quot;</span>, <span class="number">0</span>) wren_stop,
+        instance(<span class="kw">fn </span><span class="string">&quot;insert_state&quot;</span>, <span class="number">2</span>) wren_insert_state,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;play&quot;</span>, <span class="number">1</span>) wren_play_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;stop&quot;</span>, <span class="number">1</span>) wren_stop_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_state&quot;</span>, <span class="number">2</span>) wren_set_state_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;get_state&quot;</span>, <span class="number">2</span>) wren_get_state_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;insert_state&quot;</span>, <span class="number">3</span>) wren_insert_state_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_speed&quot;</span>, <span class="number">2</span>) wren_set_speed_from_gamobject,
+        <span class="kw">static</span>(<span class="kw">fn </span><span class="string">&quot;set_frame&quot;</span>, <span class="number">2</span>) wren_set_frame_from_gamobject
+    }
+
+    class(<span class="string">&quot;ComponentBehaviour&quot;</span>) <span class="kw">crate</span>::components::ComponentBehaviour =&gt; componentBehaviour {
+        instance(getter <span class="string">&quot;as_component&quot;</span>) wren_as_component
+    }
+
     module =&gt; engine
 );
 

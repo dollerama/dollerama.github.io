@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["publish_modules",""]],"struct":[["Vec2",""]]};
+window.SIDEBAR_ITEMS = {"fn":[["publish_modules",""]],"struct":[["Vec2","Vector for 2d translations etc."]]};

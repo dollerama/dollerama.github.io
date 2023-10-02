@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":[["find",""],["mut_all",""]],"struct":[["GameObject",""]]};
+window.SIDEBAR_ITEMS = {"macro":[["find",""],["mut_all",""]],"struct":[["GameObject",""],["GameObjectId","Used for identifying Gameobject"]]};
